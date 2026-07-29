@@ -15,6 +15,12 @@ import (
 )
 
 func main() {
+	if loaded, err := loadDotEnv(".env"); err != nil {
+		log.Printf(".env: %v", err)
+	} else if loaded {
+		log.Print("загружен .env")
+	}
+
 	addr := flag.String("addr", "127.0.0.1:8080",
 		"адрес HTTP-сервера (для доступа по локальной сети: 0.0.0.0:8080)")
 	contentDir := flag.String("content", "content", "папка с курсами")
@@ -22,9 +28,9 @@ func main() {
 	dsn := flag.String("dsn", envOr("GOPRACTICE_DSN", "postgres://postgres:root@localhost:5432/gopractice"),
 		"PostgreSQL DSN; пустая строка — хранить всё в памяти (пропадёт при выходе)")
 	chatMode := flag.String("chat", envOr("GOPRACTICE_CHAT", "auto"),
-		"чат-наставник: auto|api|cli|off (api — ключ ANTHROPIC_API_KEY, cli — Claude Code на подписке)")
-	chatModel := flag.String("chat-model", os.Getenv("GOPRACTICE_CHAT_MODEL"),
-		"модель для чата (по умолчанию — claude-opus-4-8 для api, модель подписки для cli)")
+		"чат-наставник: auto|api|off (api — ключ OPENAI_API_KEY)")
+	chatModel := flag.String("chat-model", envOr("GOPRACTICE_CHAT_MODEL", chat.DefaultModel),
+		"модель OpenAI для чата")
 	flag.Parse()
 
 	catalog, err := content.Load(*contentDir)

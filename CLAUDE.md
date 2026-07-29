@@ -10,7 +10,7 @@
 
 v2.1 готова и проверена (2026-07-14): пользователи с авторизацией и личным прогрессом,
 роль админа, веб-редактор контента, офлайн-подсказки, ачивки с кабинетом, чат-наставник
-(гибрид: API-ключ → Claude Code CLI → выключен).
+(OpenAI Responses API по ключу → выключен).
 Редизайн 2026-07-15: карта уровней в окне с зумом/панорамой (web/js/panzoom.js);
 витрина курсов — теги (`tags` в course.json), поиск, счётчики «завершили/проходят»
 (Store.CourseFactsAll + кэш агрегатов httpapi/aggregates.go, TTL 2 мин);
@@ -31,9 +31,9 @@ v2.1 готова и проверена (2026-07-14): пользователи �
 
 Единственный админ: Kamilot (аккаунт пользователя; пароль его собственный).
 
-Чат-наставник ждёт установки Claude Code CLI пользователем:
-`irm https://claude.ai/install.ps1 | iex` + разовый интерактивный логин `claude`.
-После этого перезапустить сервер — провайдер подхватится автоматически (режим auto).
+Чат-наставник работает через OpenAI Responses API. Сервер загружает локальный
+`.env` (не попадает в Git); ключ задаётся через `OPENAI_API_KEY`, модель по
+умолчанию — `gpt-5.6-luna`. После изменения `.env` перезапустить сервер.
 
 ## Грабли, уже собранные (не наступать повторно)
 
@@ -44,7 +44,6 @@ v2.1 готова и проверена (2026-07-14): пользователи �
   файлы корректны; смотреть с `-Encoding utf8`.
 - Уровень без теста и задач завершается ТРАНЗИТИВНО (completedSet в dto.go):
   только когда завершены все его предпосылки.
-- Классификатор Claude Code блокирует `iex` удалённых скриптов — установку CLI делает пользователь.
 - CSS с `display:flex` на элементе перебивает атрибут hidden — для таких классов нужно
   явное правило `.x[hidden]{display:none}`.
 - Статика отдаётся с `Cache-Control: no-cache` (noStaleCache в server.go) — иначе Chrome
@@ -63,8 +62,8 @@ go build ./...               # проверка компиляции
 должны остаться свободными — свой сервер пользователь запускает сам.
 
 Флаги сервера: `-addr` (LAN: `0.0.0.0:8080`), `-content`, `-web`, `-dsn`,
-`-chat auto|api|cli|off`, `-chat-model`. Env: `GOPRACTICE_DSN`, `GOPRACTICE_CHAT`,
-`GOPRACTICE_CHAT_MODEL`, `ANTHROPIC_API_KEY`.
+`-chat auto|api|off`, `-chat-model`. Env: `GOPRACTICE_DSN`, `GOPRACTICE_CHAT`,
+`GOPRACTICE_CHAT_MODEL`, `OPENAI_API_KEY`.
 
 Проверка API из PowerShell: **только `curl.exe`**. Почти всё API требует сессию:
 ```powershell
@@ -84,14 +83,13 @@ curl.exe -b cookies.txt -X POST http://127.0.0.1:8080/api/reload   # reload — 
 
 ## Архитектура
 
-Один Go-бинарник (`cmd/server`). Зависимости: `jackc/pgx/v5`, `golang.org/x/crypto`,
-`anthropics/anthropic-sdk-go`.
+Один Go-бинарник (`cmd/server`). Зависимости: `jackc/pgx/v5`, `golang.org/x/crypto`.
 
 - `internal/content` — загрузка и валидация курсов (DAG, id≠папка, hints); пустой курс/каталог допустимы (для админки)
 - `internal/runner` — проверка решений: `go build -o prog.exe` → запуск exe с context-таймаутом (НЕ `go run`), capped 256 КБ, cleanup с ретраями, pre-warm
 - `internal/store` — PostgreSQL: только сырые факты per-user (прогресс, users/sessions, chat_messages, выдачи ачивок); всё производное вычисляется
 - `internal/auth` — bcrypt + токены сессий (чистые функции)
-- `internal/chat` — провайдеры наставника: api (официальный SDK, opus-4-8 adaptive) и cli (`claude -p`, семафор 1, таймаут 120с), выбор в auto.go
+- `internal/chat` — наставник через OpenAI Responses API (`store: false`, модель `gpt-5.6-luna` по умолчанию), выбор в auto.go
 - `internal/httpapi` — REST, middleware requireUser/requireAdmin, админ-CRUD (admin.go + adminfs.go), ачивки (achievements.go), чат (chat.go)
 - `web/` — SPA без сборки: роутер с auth-гвардом, views/, views/admin/, vendor
 
