@@ -1,0 +1,9 @@
+{
+  "id": "20-bonus-json",
+  "title": "Бонус: JSON и теги структур",
+  "summary": "encoding/json: Marshal и Unmarshal, теги полей, почему поля должны быть экспортированы",
+  "requires": ["17-pointers"],
+  "optional": true,
+  "xp": 15,
+  "group": "Структуры и указатели"
+}

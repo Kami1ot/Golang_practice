@@ -1,0 +1,19 @@
+{
+  "id": "price",
+  "type": "io",
+  "title": "Ценник",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "пример из условия", "stdin": "Кофе 2 99.9\n", "stdout": "Кофе x2 = 199.80 руб.\n", "hidden": false },
+    { "name": "одна штука", "stdin": "Хлеб 1 45.5\n", "stdout": "Хлеб x1 = 45.50 руб.\n", "hidden": true },
+    { "name": "круглая цена", "stdin": "Молоко 3 60\n", "stdout": "Молоко x3 = 180.00 руб.\n", "hidden": true },
+    { "name": "десять штук", "stdin": "Сыр 10 123.45\n", "stdout": "Сыр x10 = 1234.50 руб.\n", "hidden": true }
+  ],
+  "hints": [
+    "Считать нужно три значения разных типов подряд: `string`, `int`, `float64` — `fmt.Scan(&name, &count, &price)` справится сам.",
+    "Сумма — `float64(count) * price`: количество нужно явно привести к `float64` перед умножением, иначе «mismatched types».",
+    "Формат вывода: `fmt.Printf(\"%s x%d = %.2f руб.\\n\", name, count, sum)` — сверьте каждый символ с примером: `x` прижат к числу, точка после «руб» есть."
+  ]
+}

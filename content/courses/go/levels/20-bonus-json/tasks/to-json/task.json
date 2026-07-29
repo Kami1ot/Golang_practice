@@ -1,0 +1,18 @@
+{
+  "id": "to-json",
+  "type": "io",
+  "title": "Собери JSON",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "пример из условия", "stdin": "gopher 42\n", "stdout": "{\"name\":\"gopher\",\"score\":42}\n", "hidden": false },
+    { "name": "кириллическое имя", "stdin": "гофер 100\n", "stdout": "{\"name\":\"гофер\",\"score\":100}\n", "hidden": true },
+    { "name": "нулевой счёт", "stdin": "novice 0\n", "stdout": "{\"name\":\"novice\",\"score\":0}\n", "hidden": true },
+    { "name": "отрицательный счёт", "stdin": "debtor -7\n", "stdout": "{\"name\":\"debtor\",\"score\":-7}\n", "hidden": true }
+  ],
+  "hints": [
+    "Тег пишется в обратных кавычках сразу после типа поля — сверьте с образцом из урока посимвольно: двоеточие без пробелов, имя в обычных кавычках.",
+    "`json.Marshal(p)` возвращает срез байтов и ошибку. Срез байтов превращается в строку конверсией `string(b)` — её и печатайте через `fmt.Println`."
+  ]
+}

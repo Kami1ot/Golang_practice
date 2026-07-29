@@ -1,0 +1,13 @@
+{
+  "id": "register",
+  "type": "unittest",
+  "title": "Карта под замком",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "NewRegister обязан создать карту: `&Register{scores: map[string]int{}}` — иначе первая же запись уронит программу паникой assignment to entry in nil map (привет, уровень про панику).",
+    "Add и Total — та же схема, что у счётчика: Lock, defer Unlock, работа с картой. `scores[name] += points` сам создаст ключ при первом добавлении.",
+    "Total для незнакомого имени отдельно обрабатывать не нужно: чтение отсутствующего ключа возвращает ноль — это норма карт из уровня про map."
+  ]
+}

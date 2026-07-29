@@ -1,0 +1,13 @@
+{
+  "id": "fetch",
+  "type": "unittest",
+  "title": "Fetch: скачать текст",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 20,
+  "hints": [
+    "Каркас из урока: http.Get(url) → проверить err → defer resp.Body.Close() → проверить resp.StatusCode → io.ReadAll(resp.Body). Понадобятся импорты net/http, io и fmt.",
+    "Ошибка со статусом собирается через fmt.Errorf(\"неожиданный статус: %d\", resp.StatusCode) — %d подставит код, и он окажется в тексте ошибки, как требуют тесты.",
+    "io.ReadAll возвращает []byte и ошибку: ошибку верните как есть, байты превратите в строку конверсией string(data). Сравнивайте статус с http.StatusOK."
+  ]
+}

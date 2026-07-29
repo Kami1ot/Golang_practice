@@ -1,0 +1,13 @@
+{
+  "id": "root-cause",
+  "type": "unittest",
+  "title": "До самого дна ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "errors.Unwrap снимает ровно один слой и возвращает nil, когда снимать больше нечего. Значит, нужен цикл: снимайте слои, пока Unwrap не вернёт nil.",
+    "Держите две переменные: текущую ошибку и результат очередного Unwrap. Каркас: `for { inner := errors.Unwrap(err); if inner == nil { return err }; err = inner }`.",
+    "Не забудьте guard в самом начале: `if err == nil { return nil }` — иначе для nil вернёте nil из цикла... а цикл до него даже не дойдёт, но явная проверка честнее и читается лучше."
+  ]
+}

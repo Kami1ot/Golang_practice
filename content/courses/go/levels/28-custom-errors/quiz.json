@@ -1,0 +1,80 @@
+{
+  "passScore": 1.0,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Что такое sentinel error (сигнальная ошибка)?",
+      "options": [
+        "Ошибка, которая останавливает программу",
+        "Заранее объявленное значение-ошибка уровня пакета (var ErrX = errors.New), которое функции возвращают, а вызывающие узнают через errors.Is",
+        "Любая ошибка с текстом на английском",
+        "Ошибка, создаваемая заново при каждом вызове"
+      ],
+      "answer": 1,
+      "explanation": "Sentinel — ОДНО значение, объявленное один раз: `var ErrNotFound = errors.New(\"запись не найдена\")`. Функции возвращают именно его, вызывающие проверяют `errors.Is(err, ErrNotFound)` — так код различает ожидаемые ситуации. Примеры из стандартной библиотеки: io.EOF, sql.ErrNoRows."
+    },
+    {
+      "id": "q2",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\nvar ErrLimit = errors.New(\"лимит исчерпан\")\n\nfunc withdraw(amount int) error {\n    if amount > 100 {\n        return fmt.Errorf(\"снятие %d: %w\", amount, ErrLimit)\n    }\n    return nil\n}\n\nfunc main() {\n    err := withdraw(150)\n    fmt.Println(errors.Is(err, ErrLimit))\n    fmt.Println(withdraw(50) == nil)\n}",
+      "answer": "true\ntrue\n",
+      "explanation": "withdraw(150) вернула ErrLimit, обёрнутый с контекстом, — errors.Is находит sentinel сквозь обёртку: true. withdraw(50) уложилась в лимит и вернула nil: true."
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Функция при каждом вызове делает `return errors.New(\"не найдено\")`. Почему `errors.Is(err, errors.New(\"не найдено\"))` вернёт false?",
+      "options": [
+        "errors.Is не работает с errors.New",
+        "Каждый errors.New создаёт НОВОЕ значение: сравнение идёт по идентичности значения, а не по тексту",
+        "Нужно было писать текст с большой буквы",
+        "errors.Is сравнивает только обёрнутые ошибки"
+      ],
+      "answer": 1,
+      "explanation": "`errors.New` возвращает уникальное значение — даже с одинаковым текстом два вызова дают РАЗНЫЕ ошибки. Поэтому sentinel объявляют один раз на уровне пакета (`var ErrNotFound = ...`) и возвращают именно его."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Когда вместо sentinel стоит завести собственный ТИП ошибки?",
+      "options": [
+        "Когда текст ошибки длиннее 50 символов",
+        "Когда вызывающему нужны данные из ошибки: числа, имена полей, адреса",
+        "Всегда — sentinel устарели",
+        "Когда ошибка происходит чаще раза в секунду"
+      ],
+      "answer": 1,
+      "explanation": "Sentinel отвечает только «ЧТО случилось». Если наверху нужны подробности — сколько не хватило, какое поле невалидно, — заводят структуру с полями и методом Error(), а достают её errors.As. Данные едут наверх в полях, а не в тексте."
+    },
+    {
+      "id": "q5",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\ntype QuotaError struct {\n    Used, Limit int\n}\n\nfunc (e QuotaError) Error() string {\n    return fmt.Sprintf(\"квота: %d из %d\", e.Used, e.Limit)\n}\n\nfunc main() {\n    var err error = fmt.Errorf(\"загрузка: %w\", QuotaError{Used: 12, Limit: 10})\n    var qe QuotaError\n    if errors.As(err, &qe) {\n        fmt.Println(qe.Limit)\n    }\n    fmt.Println(err)\n}",
+      "answer": "10\nзагрузка: квота: 12 из 10\n",
+      "explanation": "errors.As нашла QuotaError под обёрткой и скопировала её в qe — поле Limit (10) снова доступно. Печать самой ошибки складывает тексты матрёшки: контекст обёртки + сообщение QuotaError."
+    },
+    {
+      "id": "q6",
+      "type": "multi",
+      "prompt": "Отметьте все ВЕРНЫЕ утверждения:",
+      "options": [
+        "Sentinel объявляют один раз: `var ErrX = errors.New(...)` на уровне пакета",
+        "errors.Is находит sentinel даже сквозь несколько слоёв обёрток",
+        "Сравнивать err.Error() с текстом — надёжный способ различать ошибки",
+        "Конвенция имён: значения — с префиксом Err, типы — с суффиксом Error"
+      ],
+      "answers": [0, 1, 3],
+      "explanation": "Сравнение текстов — хрупкость в чистом виде: чуть изменилась формулировка, и проверка молча сломалась; поэтому третье утверждение неверно. Узнавайте ошибки значениями (Is) и типами (As), а не строками."
+    },
+    {
+      "id": "q7",
+      "type": "blank",
+      "prompt": "Впишите префикс, с которого по конвенции начинаются имена ошибок-значений: `var ___NoRows = errors.New(\"нет строк\")`",
+      "answers": ["Err"],
+      "explanation": "Ошибки-значения называют с префиксом Err: ErrNoRows, ErrNotFound, ErrPermission. Так по имени сразу видно, что это sentinel, который стоит проверять через errors.Is."
+    }
+  ]
+}

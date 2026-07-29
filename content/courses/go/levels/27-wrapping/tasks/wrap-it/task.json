@@ -1,0 +1,12 @@
+{
+  "id": "wrap-it",
+  "type": "unittest",
+  "title": "Первая обёртка",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 15,
+  "hints": [
+    "Каркас из урока: `err := Validate(s); if err != nil { return fmt.Errorf(\"обработка: %w\", err) }; return nil`.",
+    "Глагол — именно `%w`, не `%v`: тесты проверяют, что `errors.Is(err, ErrEmpty)` находит исходную ошибку сквозь вашу обёртку."
+  ]
+}

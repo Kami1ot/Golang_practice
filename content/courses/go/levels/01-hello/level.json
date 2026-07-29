@@ -1,0 +1,9 @@
+{
+  "id": "01-hello",
+  "title": "Привет, Go!",
+  "summary": "Что такое Go, анатомия программы, go run и go build, fmt.Println, комментарии, gofmt",
+  "requires": [],
+  "optional": false,
+  "xp": 15,
+  "group": "Основы"
+}

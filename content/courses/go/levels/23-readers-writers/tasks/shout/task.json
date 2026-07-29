@@ -1,0 +1,13 @@
+{
+  "id": "shout",
+  "type": "unittest",
+  "title": "Из ридера — в райтер, КАПСОМ",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "План из трёх шагов: прочитать всё из r (`io.ReadAll`), превратить байты в строку и поднять регистр (`strings.ToUpper(string(data))`), записать результат в w (`fmt.Fprint(w, ...)` или `w.Write([]byte(...))`).",
+    "Не глотайте ошибку чтения: `data, err := io.ReadAll(r); if err != nil { return err }` — тесты проверяют, что ошибка сломанного ридера доезжает до вызывающего.",
+    "Запись тоже может вернуть ошибку — верните её: `_, err = fmt.Fprint(w, shout); return err`. При успехе получится return nil автоматически."
+  ]
+}

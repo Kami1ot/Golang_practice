@@ -1,0 +1,8 @@
+{
+  "id": "34-context",
+  "title": "context: отмена и таймауты",
+  "summary": "Как вежливо попросить горутину остановиться: WithCancel, WithTimeout, ctx.Done в select и ctx.Err",
+  "requires": ["33-sync"],
+  "xp": 20,
+  "group": "Горутины и каналы"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "32-buffered-select",
+  "title": "Буферы и select",
+  "summary": "Каналы с запасом места и select — ждать несколько каналов сразу, не блокироваться через default",
+  "requires": ["31-channels"],
+  "xp": 25,
+  "group": "Горутины и каналы"
+}

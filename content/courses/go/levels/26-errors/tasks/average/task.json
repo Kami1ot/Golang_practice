@@ -1,0 +1,13 @@
+{
+  "id": "average",
+  "type": "unittest",
+  "title": "Среднее и отчёт ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "Average: guard-проверка `len(nums) == 0` с ранним выходом, потом сумма циклом и деление. Не забудьте конвертацию: `float64(sum) / float64(len(nums))`.",
+    "Report — это вызывающая сторона из урока: `avg, err := Average(nums)`, при ошибке верните `\"ошибка: \" + err.Error()`, при успехе — `fmt.Sprintf(\"среднее: %.1f\", avg)`.",
+    "Точные тексты: ошибка Average — `нет данных` (errors.New); строки Report — `ошибка: нет данных` и `среднее: 4.5`."
+  ]
+}

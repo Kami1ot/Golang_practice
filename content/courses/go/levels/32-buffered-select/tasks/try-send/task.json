@@ -1,0 +1,12 @@
+{
+  "id": "try-send",
+  "type": "unittest",
+  "title": "Отправка без ожидания",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 15,
+  "hints": [
+    "Неблокирующая отправка из урока: select с единственной веткой-отправкой и default.",
+    "Каркас: `select { case ch <- v: return true; default: return false }` — если отправка не готова прямо сейчас (буфер полон), мгновенно срабатывает default."
+  ]
+}

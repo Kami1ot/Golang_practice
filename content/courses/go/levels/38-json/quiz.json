@@ -1,0 +1,80 @@
+{
+  "passScore": 1.0,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Какие значения опция `omitempty` считает «пустыми» и пропускает при сериализации?",
+      "options": [
+        "`0`, `\"\"`, `false`, `nil`, а также слайс или карту нулевой длины",
+        "Только `nil`",
+        "Только пустую строку `\"\"`",
+        "Любую структуру, все поля которой нулевые"
+      ],
+      "answer": 0,
+      "explanation": "«Пустое» для omitempty — нулевые значения простых типов плюс пустые коллекции. А вот вложенная структура с нулевыми полями пустой НЕ считается — чтобы прятать её, поле делают указателем: nil-указатель уже «пустой»."
+    },
+    {
+      "id": "q2",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport (\n    \"encoding/json\"\n    \"fmt\"\n)\n\ntype Account struct {\n    Login    string `json:\"login\"`\n    Email    string `json:\"email,omitempty\"`\n    Password string `json:\"-\"`\n    Visits   int    `json:\"visits,omitempty\"`\n}\n\nfunc main() {\n    b, _ := json.Marshal(Account{Login: \"gopher\", Password: \"secret\"})\n    fmt.Println(string(b))\n}",
+      "answer": "{\"login\":\"gopher\"}\n",
+      "explanation": "Email и Visits пустые (`\"\"` и `0`) — omitempty их пропустил. Password заполнен, но тег `json:\"-\"` вычёркивает поле из JSON всегда — секрет не утёк. Остался один login."
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "У поля `Score int` стоит тег `` `json:\",omitempty\"` `` — запятая на месте, имя не указано. Что получится?",
+      "options": [
+        "Поле уедет в JSON под своим Go-именем `Score`; пустое значение пропустится",
+        "Поле получит в JSON имя `omitempty`",
+        "Ошибка компиляции: имя в теге обязательно",
+        "Поле никогда не попадёт в JSON"
+      ],
+      "answer": 0,
+      "explanation": "Пустое имя перед запятой означает «возьми имя поля как есть» — в JSON будет `Score` с большой буквы, что редко задумано. Обратная ловушка — `json:\"omitempty\"` БЕЗ запятой: это уже ИМЯ, поле уедет как `omitempty`. Запятая решает всё."
+    },
+    {
+      "id": "q4",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport (\n    \"encoding/json\"\n    \"fmt\"\n)\n\ntype Config struct {\n    Host string `json:\"host\"`\n    Port int    `json:\"port\"`\n}\n\nfunc main() {\n    cfg := Config{Host: \"localhost\", Port: 8080}\n    json.Unmarshal([]byte(`{\"port\":9000}`), &cfg)\n    fmt.Println(cfg.Host, cfg.Port)\n}",
+      "answer": "localhost 9000\n",
+      "explanation": "Unmarshal трогает только поля, которые есть в JSON: port переписался на 9000, а host в JSON отсутствовал — осталось прежнее «localhost». Этот приём даёт значения по умолчанию: заполнить структуру до разбора."
+    },
+    {
+      "id": "q5",
+      "type": "multi",
+      "prompt": "Отметьте все ВЕРНЫЕ утверждения:",
+      "options": [
+        "`json.NewDecoder(f).Decode(&v)` читает JSON прямо из потока — файл не нужно целиком загружать в память",
+        "`Encoder.Encode` дописывает `\\n` после каждого значения — два вызова дают готовый NDJSON",
+        "Числа из JSON в `map[string]any` всегда приходят как `float64`",
+        "`json.Unmarshal` можно передать структуру по значению — он вернёт изменённую копию"
+      ],
+      "answers": [0, 1, 2],
+      "explanation": "Декодер ест ровно одно значение из любого io.Reader, Encode добавляет перевод строки (это и есть формат NDJSON), а числа неизвестной формы — только float64. Последнее неверно: Unmarshal пишет результат по указателю и без `&` возвращает ошибку «non-pointer» — копий он не возвращает."
+    },
+    {
+      "id": "q6",
+      "type": "blank",
+      "prompt": "Впишите метод декодера, который сообщает, есть ли в потоке следующее значение: `for dec.____() { var e Event; dec.Decode(&e) }`",
+      "answers": ["More"],
+      "explanation": "`dec.More()` возвращает true, пока в потоке есть очередное значение, и false на конце — стандартный цикл чтения NDJSON: `for dec.More() { dec.Decode(&e) }`."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "JSON `{\"n\": 7}` разобрали через `json.Unmarshal(data, &v)`, где `v` — `map[string]any`. Затем выполняют `v[\"n\"].(int)`. Что произойдёт?",
+      "options": [
+        "Паника: JSON-числа декодируются в `float64`, а type assertion не конвертирует типы",
+        "Вернётся `7`",
+        "Вернётся `7.0` — assertion сам приведёт тип",
+        "Вернётся `nil` без паники"
+      ],
+      "answer": 0,
+      "explanation": "В JSON нет отдельного целого типа, поэтому все числа в `any` — float64. Одиночная форма assertion на «не тот» тип паникует (она проверяет ТОЧНЫЙ тип, конвертаций нет). Правильно: `int(v[\"n\"].(float64))` — привет type switch с уровня про any."
+    }
+  ]
+}

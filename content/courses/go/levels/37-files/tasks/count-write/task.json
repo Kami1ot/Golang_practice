@@ -1,0 +1,13 @@
+{
+  "id": "count-write",
+  "type": "unittest",
+  "title": "Счёт и запись строк",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "CountLines — связка из урока: os.Open → проверка err → defer f.Close() → bufio.NewScanner(f) → цикл for sc.Scan() со счётчиком → после цикла sc.Err().",
+    "Не потеряйте ошибку открытия: `if err != nil { return 0, err }` (можно обернуть через fmt.Errorf с %w — тесты проверяют errors.Is, обёртка им не мешает). Возвращать свою ошибку вместо исходной нельзя — потеряется fs.ErrNotExist.",
+    "WriteLines: os.Create → проверка err → defer f.Close() → `for _, line := range lines { fmt.Fprintln(f, line) }`. Fprintln сам добавит \\n после каждой строки; пустой срез — цикл не выполнится ни разу, останется пустой файл."
+  ]
+}

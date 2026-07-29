@@ -1,0 +1,9 @@
+{
+  "id": "10-bonus-nested",
+  "title": "Бонус: вложенные циклы",
+  "summary": "Цикл в цикле: таблицы, фигуры из символов, метки break LABEL, цена O(n²)",
+  "requires": ["05-for"],
+  "optional": true,
+  "xp": 15,
+  "group": "Циклы и коллекции"
+}

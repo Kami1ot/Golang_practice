@@ -1,0 +1,8 @@
+{
+  "id": "09-strings",
+  "title": "Строки и руны",
+  "summary": "UTF-8, байты vs руны, пакет strings, strconv, обход строки range-циклом",
+  "requires": ["08-maps"],
+  "xp": 25,
+  "group": "Циклы и коллекции"
+}

@@ -1,0 +1,80 @@
+{
+  "passScore": 1.0,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "В каком случае `http.Get(url)` вернёт `err != nil`?",
+      "options": [
+        "Сервер ответил статусом `404 Not Found`",
+        "Не удалось достучаться до сервера: DNS не знает имени, соединение отвергнуто, сеть оборвалась",
+        "Сервер ответил статусом `500 Internal Server Error`",
+        "В ответе нет заголовка `Content-Type`"
+      ],
+      "answer": 1,
+      "explanation": "Ошибка http.Get — только про проблемы доставки: до сервера не добрались. Если сервер ответил — хоть 404, хоть 500 — вызов успешен: err == nil, а код лежит в resp.StatusCode. Поэтому статус всегда проверяют отдельно — это главная ловушка уровня."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Что такое `resp.Body`?",
+      "options": [
+        "`io.ReadCloser` — поток байтов: io.Reader плюс метод Close, который обязательно вызвать",
+        "Строка с телом ответа — можно сразу печатать",
+        "`[]byte` — тело уже прочитано в память целиком",
+        "Map с заголовками ответа"
+      ],
+      "answer": 0,
+      "explanation": "Тело не лежит в памяти готовым — оно дочитывается из соединения по мере чтения, поэтому Body — это io.Reader (привет уровню про потоки) с добавкой Close. Отсюда и io.ReadAll/json.NewDecoder для чтения, и обязательный defer resp.Body.Close() — незакрытое тело держит соединение."
+    },
+    {
+      "id": "q3",
+      "type": "output",
+      "prompt": "Что выведет эта программа? (`srv.URL` — адрес локального httptest-сервера)",
+      "code": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n    \"net/http/httptest\"\n)\n\nfunc main() {\n    srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n        w.WriteHeader(404)\n        fmt.Fprint(w, \"нет такого\")\n    }))\n    defer srv.Close()\n\n    resp, err := http.Get(srv.URL)\n    fmt.Println(err)\n    defer resp.Body.Close()\n\n    body, _ := io.ReadAll(resp.Body)\n    fmt.Println(resp.StatusCode)\n    fmt.Println(string(body))\n}",
+      "answer": "<nil>\n404\nнет такого\n",
+      "explanation": "Сервер ответил 404 — но ответил! Доставка сработала, поэтому err равен nil и печатается как <nil>. Код и тело «страницы ошибки» доступны как у обычного ответа: 404 и «нет такого». Именно поэтому проверку статуса пишут руками — http.Get за вас её не сделает."
+    },
+    {
+      "id": "q4",
+      "type": "multi",
+      "prompt": "Отметьте все ВЕРНЫЕ утверждения:",
+      "options": [
+        "`defer resp.Body.Close()` нужен, даже если тело вы не читаете",
+        "Если сервер вернул `500`, `http.Get` вернёт `err != nil`",
+        "`json.NewDecoder(resp.Body)` декодирует JSON прямо из тела — промежуточный ReadAll не нужен",
+        "Клиент без `Timeout` может ждать ответа молчащего сервера вечно"
+      ],
+      "answers": [0, 2, 3],
+      "explanation": "Незакрытое тело держит соединение независимо от того, читали вы его или нет. Body — это io.Reader, поэтому Decoder стыкуется с ним напрямую. А http.DefaultClient (которым пользуется http.Get) не имеет таймаута — молчащий сервер подвесит программу. Неверно второе: 500 — успешно доставленный ответ, err будет nil."
+    },
+    {
+      "id": "q5",
+      "type": "output",
+      "prompt": "Что выведет эта программа? Сервер отвечает строкой «метод Content-Type тело» из пришедшего запроса.",
+      "code": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n    \"net/http/httptest\"\n    \"strings\"\n)\n\nfunc main() {\n    srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n        body, _ := io.ReadAll(r.Body)\n        fmt.Fprintf(w, \"%s %s %s\", r.Method, r.Header.Get(\"Content-Type\"), body)\n    }))\n    defer srv.Close()\n\n    resp, err := http.Post(srv.URL, \"application/json\", strings.NewReader(`{\"id\":7}`))\n    if err != nil {\n        fmt.Println(\"err:\", err)\n        return\n    }\n    defer resp.Body.Close()\n\n    reply, _ := io.ReadAll(resp.Body)\n    fmt.Println(string(reply))\n    fmt.Println(resp.StatusCode)\n}",
+      "answer": "POST application/json {\"id\":7}\n200\n",
+      "explanation": "http.Post отправляет запрос методом POST, второй аргумент уезжает в заголовок Content-Type, а тело берётся из переданного io.Reader — сервер-эхо всё это возвращает одной строкой. Хендлер не задавал статус явно, поэтому Go отвечает 200 по умолчанию."
+    },
+    {
+      "id": "q6",
+      "type": "blank",
+      "prompt": "Впишите метод, который обязательно вызывают после работы с ответом: `defer resp.Body.___()`",
+      "answers": ["Close"],
+      "explanation": "resp.Body.Close() возвращает соединение в пул переиспользования. Забытый Close — утечка: соединения копятся, и под нагрузкой программа исчерпает дескрипторы. Пишут его через defer сразу после проверки ошибки http.Get."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Что делает `httptest.NewServer(handler)`?",
+      "options": [
+        "Поднимает настоящий HTTP-сервер на локальном адресе и возвращает объект с его URL",
+        "Эмулирует HTTP в памяти, не открывая сетевых соединений",
+        "Отправляет тестовый запрос на example.com и сверяет ответ",
+        "Создаёт http.Client с таймаутом для тестов"
+      ],
+      "answer": 0,
+      "explanation": "httptest.NewServer — не заглушка: он слушает реальный порт на 127.0.0.1, и запросы честно ходят по TCP. Тест передаёт srv.URL проверяемой функции, а после — srv.Close(). Именно так, без интернета, проверяются задачи этого уровня."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "39-http-client",
+  "title": "net/http: клиент",
+  "summary": "Программа выходит в сеть: http.Get и http.Post, статус-коды, defer Body.Close и JSON-ответы прямо из resp.Body",
+  "requires": ["38-json"],
+  "xp": 25,
+  "group": "Стандартная библиотека"
+}

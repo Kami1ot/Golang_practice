@@ -1,0 +1,8 @@
+{
+  "id": "07-slices",
+  "title": "Слайсы",
+  "summary": "Массивы и слайсы: литералы, make, len/cap, append, срезы, range, copy",
+  "requires": ["06-range"],
+  "xp": 25,
+  "group": "Циклы и коллекции"
+}

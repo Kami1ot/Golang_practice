@@ -1,0 +1,13 @@
+{
+  "id": "leaderboard",
+  "type": "unittest",
+  "title": "Таблица лидеров",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "Два ключа — значит, less-функция из урока с if: сначала сравните очки, и только при равенстве — имена.",
+    "По очкам порядок УБЫВАЮЩИЙ (`players[i].Score > players[j].Score`), а по именам при равных очках — ВОЗРАСТАЮЩИЙ (`players[i].Name < players[j].Name`). Не перепутайте знаки.",
+    "Каркас: `sort.Slice(players, func(i, j int) bool { if players[i].Score != players[j].Score { return players[i].Score > players[j].Score }; return players[i].Name < players[j].Name })`."
+  ]
+}

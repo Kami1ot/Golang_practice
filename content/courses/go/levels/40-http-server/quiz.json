@@ -1,0 +1,80 @@
+{
+  "passScore": 1.0,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Почему внутри хендлера работает `fmt.Fprintf(w, \"Привет!\")`?",
+      "options": [
+        "`http.ResponseWriter` реализует `io.Writer` — у него есть метод `Write([]byte) (int, error)`",
+        "`fmt.Fprintf` принимает первым аргументом значение любого типа",
+        "Это особый случай, встроенный в компилятор для пакета net/http",
+        "Не работает — писать в ответ можно только через `w.Write`"
+      ],
+      "answer": 0,
+      "explanation": "ResponseWriter удовлетворяет интерфейсу io.Writer, а Fprintf принимает именно io.Writer — тот самый механизм с уровня про потоки. По той же причине с w работают fmt.Fprintln и json.NewEncoder(w).Encode: хендлер пишет в ответ, как в файл или буфер."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Маршрут зарегистрирован как `mux.HandleFunc(\"GET /ping\", ping)`. Что получит клиент, отправивший `POST /ping`?",
+      "options": [
+        "200 — метод в шаблоне ни на что не влияет",
+        "404 — путь не найден",
+        "405 Method Not Allowed — mux сам отклонит неподходящий метод",
+        "Панику сервера"
+      ],
+      "answer": 2,
+      "explanation": "С Go 1.22 метод — часть шаблона: путь совпал, а метод нет, поэтому mux отвечает 405 без единой строчки вашего кода. До Go 1.22 приходилось вручную проверять r.Method в каждом хендлере — этот паттерн вы ещё встретите в старом коде."
+    },
+    {
+      "id": "q3",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport (\n    \"fmt\"\n    \"net/http\"\n    \"net/http/httptest\"\n)\n\nfunc greet(w http.ResponseWriter, r *http.Request) {\n    name := r.URL.Query().Get(\"name\")\n    if name == \"\" {\n        name = \"гость\"\n    }\n    fmt.Fprintf(w, \"Привет, %s!\", name)\n}\n\nfunc main() {\n    req := httptest.NewRequest(\"GET\", \"/greet?name=Go\", nil)\n    rec := httptest.NewRecorder()\n    greet(rec, req)\n    fmt.Println(rec.Code)\n    fmt.Println(rec.Body.String())\n}",
+      "answer": "200\nПривет, Go!\n",
+      "explanation": "Хендлер — обычная функция: httptest.NewRequest собирает запрос, NewRecorder записывает всё, что хендлер выведет. В URL есть ?name=Go, поэтому Query().Get(\"name\") вернёт «Go». Хендлер не трогал WriteHeader — статус остался 200 по умолчанию."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "В каком порядке хендлер обязан формировать ответ с JSON и статусом 201?",
+      "options": [
+        "Тело → `WriteHeader(201)` → `Header().Set` — главное, чтобы всё было",
+        "`Header().Set(\"Content-Type\", ...)` → `WriteHeader(201)` → тело",
+        "`WriteHeader(201)` → `Header().Set(\"Content-Type\", ...)` → тело",
+        "Порядок не важен: net/http сам всё пересортирует"
+      ],
+      "answer": 1,
+      "explanation": "Порядок железный: заголовки → статус → тело, потому что именно в этом порядке ответ физически уезжает клиенту. WriteHeader после записи тела даст «superfluous response.WriteHeader» в логе (клиент уже получил 200), а Header().Set после WriteHeader молча потеряется."
+    },
+    {
+      "id": "q5",
+      "type": "multi",
+      "prompt": "Отметьте все ВЕРНЫЕ утверждения о сервере net/http:",
+      "options": [
+        "Каждый запрос обрабатывается в отдельной горутине, поэтому общий счётчик нужно защищать мьютексом",
+        "Если хендлер не вызывал WriteHeader, клиент получит статус 200",
+        "После `http.Error(w, ..., 400)` нужен `return` — иначе хендлер продолжит выполняться",
+        "Паника в хендлере роняет весь сервер вместе с остальными запросами"
+      ],
+      "answers": [0, 1, 2],
+      "explanation": "Сервер конкурентен по построению — отсюда мьютексы для общего состояния. Статус по умолчанию — 200. http.Error лишь пишет статус и текст, выйти из функции он не может — забытый return дописывает лишнее в тело. А паника роняет только горутину своего запроса: сервер логирует стек и живёт дальше."
+    },
+    {
+      "id": "q6",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport (\n    \"fmt\"\n    \"net/http\"\n    \"net/http/httptest\"\n)\n\nfunc main() {\n    mux := http.NewServeMux()\n    mux.HandleFunc(\"GET /users/{id}\", func(w http.ResponseWriter, r *http.Request) {\n        fmt.Fprintf(w, \"user %s\", r.PathValue(\"id\"))\n    })\n\n    rec := httptest.NewRecorder()\n    mux.ServeHTTP(rec, httptest.NewRequest(\"GET\", \"/users/42\", nil))\n    fmt.Println(rec.Code, rec.Body.String())\n\n    rec2 := httptest.NewRecorder()\n    mux.ServeHTTP(rec2, httptest.NewRequest(\"POST\", \"/users/42\", nil))\n    fmt.Println(rec2.Code)\n}",
+      "answer": "200 user 42\n405\n",
+      "explanation": "GET совпал с шаблоном: {id} захватил сегмент «42», PathValue вернул его строкой, статус — 200 по умолчанию. POST по тому же пути отклонил сам mux: метод не совпал с шаблоном «GET /users/{id}» — 405 Method Not Allowed, хендлер даже не вызывался."
+    },
+    {
+      "id": "q7",
+      "type": "blank",
+      "prompt": "Маршрут объявлен как `\"GET /users/{id}\"`. Впишите метод запроса, который достаёт значение `{id}` в хендлере: `id := r.___(\"id\")`",
+      "answers": ["PathValue"],
+      "explanation": "r.PathValue(\"id\") возвращает кусок пути, совпавший с подстановкой {id}, — всегда строкой: для /users/42 это «42». Число из неё делает strconv.Atoi — и его ошибка как раз повод ответить 400."
+    }
+  ]
+}

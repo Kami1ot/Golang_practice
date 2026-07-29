@@ -1,0 +1,13 @@
+{
+  "id": "fetch-user",
+  "type": "unittest",
+  "title": "FetchUser: JSON из API",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 20,
+  "hints": [
+    "URL собирается через fmt.Sprintf(\"%s/users/%d\", baseURL, id). Дальше — каркас из первой задачи: Get → проверить err → defer Close → проверить статус.",
+    "Декодируйте прямо из тела, без ReadAll: json.NewDecoder(resp.Body).Decode(&u) — resp.Body уже io.Reader, ровно как на уровне про JSON. Ошибку Decode верните как есть.",
+    "Все ошибочные возвраты — нулевая структура: return User{}, err. Для неверного статуса — fmt.Errorf(\"неожиданный статус: %d\", resp.StatusCode), сравнение — с http.StatusOK."
+  ]
+}

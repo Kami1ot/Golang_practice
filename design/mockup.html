@@ -1,0 +1,1025 @@
+<!-- GoPractice — дизайн-макет ключевых экранов.
+     Источник правды для web/css/app.css после утверждения.
+     Палитра: тёмная IDE-основа с синим смещением + фирменный Go-циан.
+     Шрифты: системный стек (Segoe UI на Windows) + Cascadia/Consolas для кода и ярлыков. -->
+<title>GoPractice — дизайн-макет</title>
+<style>
+  :root {
+    --bg: #0d1220;
+    --panel: #131a2a;
+    --panel-2: #1a2338;
+    --border: #232e47;
+    --border-strong: #33415f;
+    --text: #d7e0f0;
+    --muted: #8290ab;
+    --accent: #22b8e6;
+    --accent-soft: rgba(34, 184, 230, 0.12);
+    --accent-ink: #06222e;
+    --success: #43c478;
+    --success-soft: rgba(67, 196, 120, 0.12);
+    --danger: #e55d6b;
+    --danger-soft: rgba(229, 93, 107, 0.10);
+    --gold: #e8c558;
+    --gold-soft: rgba(232, 197, 88, 0.10);
+    --locked: #4a5670;
+    --code-bg: #0a0f1a;
+    --shadow: 0 10px 30px rgba(3, 7, 18, 0.45);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font-ui: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "Cascadia Code", "Cascadia Mono", Consolas, "JetBrains Mono", monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #eef1f7;
+      --panel: #ffffff;
+      --panel-2: #f4f7fc;
+      --border: #dbe2ef;
+      --border-strong: #c3cede;
+      --text: #1c2536;
+      --muted: #5d6a85;
+      --accent: #0089b8;
+      --accent-soft: rgba(0, 137, 184, 0.10);
+      --accent-ink: #ffffff;
+      --success: #1f9d57;
+      --success-soft: rgba(31, 157, 87, 0.10);
+      --danger: #cc3f50;
+      --danger-soft: rgba(204, 63, 80, 0.08);
+      --gold: #b28a1d;
+      --gold-soft: rgba(178, 138, 29, 0.10);
+      --locked: #97a3bc;
+      --code-bg: #0d1220;
+      --shadow: 0 8px 24px rgba(28, 37, 54, 0.10);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1220; --panel: #131a2a; --panel-2: #1a2338; --border: #232e47;
+    --border-strong: #33415f; --text: #d7e0f0; --muted: #8290ab;
+    --accent: #22b8e6; --accent-soft: rgba(34,184,230,.12); --accent-ink: #06222e;
+    --success: #43c478; --success-soft: rgba(67,196,120,.12);
+    --danger: #e55d6b; --danger-soft: rgba(229,93,107,.10);
+    --gold: #e8c558; --gold-soft: rgba(232,197,88,.10);
+    --locked: #4a5670; --code-bg: #0a0f1a; --shadow: 0 10px 30px rgba(3,7,18,.45);
+  }
+  :root[data-theme="light"] {
+    --bg: #eef1f7; --panel: #ffffff; --panel-2: #f4f7fc; --border: #dbe2ef;
+    --border-strong: #c3cede; --text: #1c2536; --muted: #5d6a85;
+    --accent: #0089b8; --accent-soft: rgba(0,137,184,.10); --accent-ink: #ffffff;
+    --success: #1f9d57; --success-soft: rgba(31,157,87,.10);
+    --danger: #cc3f50; --danger-soft: rgba(204,63,80,.08);
+    --gold: #b28a1d; --gold-soft: rgba(178,138,29,.10);
+    --locked: #97a3bc; --code-bg: #0d1220; --shadow: 0 8px 24px rgba(28,37,54,.10);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* Тонкие тёмные скроллбары в стиле IDE вместо системных белых. */
+  * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: var(--border-strong); border-radius: 999px;
+    border: 2px solid transparent; background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover { background-color: var(--locked); }
+
+  .frame { max-width: 1080px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ── Метки макета ─────────────────────────────── */
+  .mock-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 64px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mock-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── Шапка приложения ─────────────────────────── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .logo {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+  }
+  .logo .go { color: var(--accent); }
+  .logo .cursor {
+    display: inline-block; width: 8px; height: 17px;
+    background: var(--accent); vertical-align: -2px; margin-left: 2px;
+    animation: blink 1.2s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .logo .cursor { animation: none; } }
+  .topbar .crumbs { color: var(--muted); font-size: 14px; }
+  .topbar .crumbs b { color: var(--text); font-weight: 600; }
+  .xp-pill {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--gold);
+    background: var(--gold-soft);
+    border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Экран: дерево курса ──────────────────────── */
+  .screen {
+    margin-top: 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    /* clip, не hidden: hidden делает .screen scroll-контейнером и ломает sticky-вкладки */
+    overflow: hidden;
+    overflow: clip;
+  }
+  .screen-head {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .screen-head h1 { margin: 0 0 4px; font-size: 24px; font-weight: 650; letter-spacing: -0.015em; text-wrap: balance; }
+  .screen-head p { margin: 0; color: var(--muted); font-size: 14px; max-width: 52ch; }
+  .progress-block { margin-left: auto; min-width: 220px; }
+  .progress-row {
+    display: flex; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+    margin-bottom: 6px; font-variant-numeric: tabular-nums;
+  }
+  .progress-row b { color: var(--text); }
+  .bar { height: 6px; border-radius: 999px; background: var(--panel-2); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 25%; border-radius: 999px;
+           background: linear-gradient(90deg, var(--accent), var(--success)); }
+
+  .tree-wrap { padding: 12px 8px 20px; overflow-x: auto; }
+  svg.tree { display: block; margin: 0 auto; max-width: 100%; }
+
+  .tree text { font-family: var(--font-ui); }
+  .node-title { font-size: 14px; font-weight: 600; fill: var(--text); }
+  .node-sub   { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); }
+  .node-xp    { font-family: var(--font-mono); font-size: 11px; fill: var(--gold); }
+  .node-box   { fill: var(--panel-2); stroke: var(--border-strong); stroke-width: 1.2; rx: 12; }
+  .node.completed .node-box { stroke: var(--success); fill: color-mix(in srgb, var(--success) 7%, var(--panel-2)); }
+  .node.available .node-box { stroke: var(--accent); stroke-width: 1.6;
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 45%, transparent)); }
+  .node.locked { opacity: 0.55; }
+  .node.locked .node-title, .node.locked .node-sub { fill: var(--muted); }
+  .node.bonus .node-box { stroke-dasharray: 5 4; }
+  .node.bonus:not(.locked) .node-box { stroke: var(--gold); }
+  .edge { stroke: var(--border-strong); stroke-width: 1.6; fill: none; }
+  .edge.done { stroke: var(--success); }
+  .edge.next { stroke: var(--accent); }
+  .edge.to-locked { stroke-dasharray: 4 5; }
+  .badge-done  { fill: var(--success); }
+  .badge-play  { fill: var(--accent); }
+  .badge-lock  { fill: var(--locked); }
+  .node { cursor: pointer; }
+  .node.locked { cursor: not-allowed; }
+
+  .legend {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    padding: 0 28px 20px;
+    font-size: 13px; color: var(--muted);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 3px; border: 1.5px solid var(--border-strong); background: var(--panel-2); }
+  .dot.c { border-color: var(--success); background: var(--success-soft); }
+  .dot.a { border-color: var(--accent); background: var(--accent-soft); }
+  .dot.b { border-color: var(--gold); border-style: dashed; }
+
+  /* ── Окно карты: зум + панорама (в приложении управляет panzoom.js);
+       экран карты, как и уровень, раскрывается во всю ширину (#app.wide) ── */
+  .map-wrap {
+    position: relative;
+    height: clamp(420px, calc(100vh - 310px), 1600px);
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    padding: 0;
+  }
+  .map-wrap svg.tree { width: 100%; height: 100%; max-width: none; margin: 0; display: block; }
+  .map-controls {
+    position: absolute; top: 12px; right: 12px; z-index: 5;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .map-controls button {
+    width: 34px; height: 34px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    font: inherit; font-size: 16px; line-height: 1;
+    color: var(--text); cursor: pointer;
+    background: color-mix(in srgb, var(--panel) 85%, transparent);
+    border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    backdrop-filter: blur(6px);
+  }
+  .map-controls button:hover { border-color: var(--accent); color: var(--accent); }
+  .legend.map-legend {
+    position: absolute; left: 12px; bottom: 10px; z-index: 5;
+    padding: 6px 12px; border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--panel) 85%, transparent);
+    border: 1px solid var(--border); backdrop-filter: blur(6px);
+  }
+
+  /* ── Экран: уровень ───────────────────────────── */
+  .level-head { padding: 24px 28px 0; text-align: center; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+  }
+  .level-head h1 { margin: 0 0 6px; font-size: 24px; font-weight: 650; letter-spacing: -0.015em; }
+  .level-head .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+
+  /* В приложении вкладки sticky: top = высота шапки (--topbar-h), а .screen — overflow: clip. */
+  .tabs {
+    display: flex; gap: 4px; padding: 0 28px; justify-content: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 20; background: var(--panel);
+  }
+  .tab {
+    appearance: none; background: none; border: none;
+    font: inherit; color: var(--muted);
+    padding: 10px 16px 12px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: color 0.15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+  .tab .tick { color: var(--success); font-size: 13px; }
+  .tab .count {
+    font-family: var(--font-mono); font-size: 11px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    padding: 1px 7px; border-radius: 999px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .tab-panel { padding: 24px 28px 28px; }
+  .tab-panel[hidden] { display: none; }
+  .panel-nav {
+    display: flex; align-items: center; gap: 12px;
+    max-width: 68ch; margin: 32px auto 0;
+    padding-top: 18px; border-top: 1px solid var(--border);
+  }
+  .panel-nav .next { margin-left: auto; }
+
+  /* ── Урок ─────────────────────────────────────── */
+  .lesson { max-width: 68ch; margin-inline: auto; }
+  .lesson h2 { font-size: 18px; font-weight: 650; margin: 28px 0 10px; letter-spacing: -0.01em; }
+  .lesson p { margin: 0 0 14px; }
+  .lesson code {
+    font-family: var(--font-mono); font-size: 0.9em;
+    background: var(--accent-soft); color: var(--accent);
+    padding: 1px 6px; border-radius: 5px;
+  }
+  pre.code {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #d7e0f0;
+    margin: 0 0 14px;
+  }
+  .code .kw { color: #6fc1ff; }     /* ключевые слова */
+  .code .str { color: #7ee0a3; }    /* строки */
+  .code .fn { color: #e8c558; }     /* функции */
+  .code .com { color: #5d6a85; font-style: italic; }
+  .callout {
+    display: flex; gap: 12px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin: 0 0 14px;
+    font-size: 14px;
+  }
+  .callout.warn { border-left-color: var(--gold); background: var(--gold-soft); }
+  .callout .ico { font-family: var(--font-mono); font-weight: 700; color: var(--accent); }
+  .callout.warn .ico { color: var(--gold); }
+
+  /* ── Тест ─────────────────────────────────────── */
+  .quiz { max-width: 68ch; margin-inline: auto; display: flex; flex-direction: column; gap: 16px; }
+  .q-card {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+  }
+  .q-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 6px; }
+  .q-card h3 { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); margin-bottom: 8px;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  }
+  .opt:hover { border-color: var(--border-strong); background: color-mix(in srgb, var(--panel) 60%, transparent); }
+  .opt input { accent-color: var(--accent); width: 15px; height: 15px; }
+  .opt code { font-family: var(--font-mono); font-size: 0.9em; }
+  .q-card.correct { border-color: var(--success); }
+  .q-card.wrong { border-color: var(--danger); }
+  .opt.picked-right { border-color: var(--success); background: var(--success-soft); }
+  .opt.picked-wrong { border-color: var(--danger); background: var(--danger-soft); }
+  .explain {
+    display: flex; gap: 10px;
+    font-size: 13.5px;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-top: 10px;
+  }
+  .explain.good { background: var(--success-soft); color: var(--success); }
+  .explain.bad { background: var(--danger-soft); color: var(--danger); }
+  .explain .body { color: var(--text); }
+  .answer-input {
+    font-family: var(--font-mono); font-size: 14px;
+    background: var(--code-bg); color: #d7e0f0;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px; width: 240px;
+  }
+  .answer-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  textarea.answer-input {
+    display: block; width: min(420px, 100%);
+    resize: vertical; field-sizing: content; /* растёт по мере ввода строк */
+    line-height: 1.5;
+  }
+
+  .quiz-footer { display: flex; align-items: center; gap: 16px; margin-top: 4px; }
+  .quiz-score { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .quiz-score b { color: var(--danger); }
+
+  /* ── Кнопки ───────────────────────────────────── */
+  .btn {
+    appearance: none; border: none; font: inherit; font-weight: 600;
+    border-radius: var(--radius-sm); padding: 9px 18px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: filter 0.15s, transform 0.05s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.primary:hover { filter: brightness(1.1); }
+  .btn.ghost { background: none; border: 1px solid var(--border-strong); color: var(--muted); }
+  .btn.ghost:hover { color: var(--text); border-color: var(--text); }
+  .btn .spin {
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--accent-ink) 35%, transparent);
+    border-top-color: var(--accent-ink);
+    animation: rot 0.7s linear infinite;
+  }
+  @keyframes rot { to { transform: rotate(360deg); } }
+
+  /* ── Задачи ───────────────────────────────────── */
+  .task-card {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .task-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .task-head h3 { margin: 0; font-size: 15px; font-weight: 600; }
+  .chip {
+    font-family: var(--font-mono); font-size: 11px;
+    padding: 2px 9px; border-radius: 999px;
+    border: 1px solid var(--border-strong); color: var(--muted);
+  }
+  .chip.done { color: var(--success); border-color: var(--success); background: var(--success-soft); }
+  .chip.bonus { color: var(--gold); border-color: var(--gold); }
+  .task-statement { padding: 16px 20px 4px; max-width: 68ch; }
+  .task-statement p { margin: 0 0 12px; }
+
+  .editor {
+    margin: 8px 20px 0;
+    background: var(--code-bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .editor-bar {
+    display: flex; align-items: center;
+    padding: 6px 12px;
+    background: color-mix(in srgb, var(--code-bg) 60%, var(--panel-2));
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  }
+  .editor-bar .autosave { margin-left: auto; color: var(--success); }
+  .editor pre {
+    margin: 0; padding: 12px 0;
+    font-family: var(--font-mono); font-size: 13.5px; line-height: 1.6;
+    color: #d7e0f0; overflow-x: auto;
+  }
+  .ln { display: inline-block; width: 44px; text-align: right; padding-right: 14px; color: #3d4a66; user-select: none; }
+
+  .task-actions { display: flex; gap: 12px; padding: 14px 20px; }
+
+  .results { margin: 0 20px 20px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+  .res-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .res-row:last-child { border-bottom: none; }
+  .res-ico { font-family: var(--font-mono); font-weight: 700; width: 18px; text-align: center; }
+  .res-row.pass .res-ico { color: var(--success); }
+  .res-row.fail .res-ico { color: var(--danger); }
+  .res-row.skip { color: var(--muted); }
+  .res-name { flex: 1; }
+  .res-time { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .res-hidden { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  .diff {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+  }
+  .diff > div { background: var(--code-bg); padding: 10px 16px; }
+  .diff .cap { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .diff .exp .cap { color: var(--success); }
+  .diff .act .cap { color: var(--danger); }
+  .diff pre { margin: 0; font-family: var(--font-mono); font-size: 13px; color: #d7e0f0; }
+
+  .compile-error {
+    margin: 0 20px 20px;
+    background: var(--danger-soft);
+    border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+  }
+  .compile-error .cap { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--danger); margin-bottom: 6px; }
+  .compile-error pre { margin: 0; font-family: var(--font-mono); font-size: 13px; color: var(--text); white-space: pre-wrap; }
+
+  /* ── Баннер успеха ────────────────────────────── */
+  .win-banner {
+    margin: 0 28px 28px;
+    display: flex; align-items: center; gap: 16px;
+    background: linear-gradient(135deg, var(--success-soft), var(--accent-soft));
+    border: 1px solid var(--success);
+    border-radius: var(--radius);
+    padding: 18px 24px;
+  }
+  .win-banner .big { font-size: 28px; }
+  .win-banner h3 { margin: 0 0 2px; font-size: 16px; font-weight: 650; }
+  .win-banner p { margin: 0; color: var(--muted); font-size: 13.5px; }
+  .win-banner .btn { margin-left: auto; }
+
+  /* ── Карточка курса (список курсов) ───────────── */
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; }
+  .course-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .course-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .course-card .eyebrow { margin-bottom: 8px; }
+  .course-card h2 { margin: 0 0 6px; font-size: 18px; font-weight: 650; }
+  .course-card p { margin: 0 0 16px; color: var(--muted); font-size: 13.5px; }
+  .course-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .course-card.soon { opacity: 0.6; cursor: default; }
+  .course-card.soon:hover { border-color: var(--border); transform: none; }
+
+  /* ── Витрина: тулбар, теги, статистика ────────── */
+  .courses-toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 16px 0 2px; }
+  .search-input {
+    font: inherit; padding: 9px 14px;
+    background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    flex: 1; min-width: 220px; max-width: 380px;
+  }
+  .search-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag-chip {
+    font-family: var(--font-mono); font-size: 11px;
+    padding: 4px 11px; border-radius: 999px;
+    border: 1px solid var(--border-strong); color: var(--muted);
+    background: none; cursor: pointer; white-space: nowrap;
+  }
+  .tag-chip[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  .course-tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 14px; }
+  .course-tags .chip {
+    font-family: var(--font-mono); font-size: 11px;
+    padding: 2px 9px; border-radius: 999px;
+    border: 1px solid var(--border-strong); color: var(--muted); white-space: nowrap;
+  }
+  .course-stats {
+    display: flex; gap: 8px; align-items: center; margin-top: 8px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .course-stats .done { color: var(--success); }
+  .course-stats .active { color: var(--accent); }
+
+  /* ── Уровень: полноэкранный контент без панели-рамки.
+       В приложении включается классом #app.wide (ставит роутер);
+       вкладки sticky с полупрозрачным фоном, задачи — IDE-сплит. ── */
+  .screen.level-screen {
+    background: none; border: none; box-shadow: none;
+    border-radius: 0; overflow: visible;
+  }
+  .level-screen .tabs {
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  .level-screen .lesson, .level-screen .quiz { max-width: 86ch; }
+  .task-split { display: block; }
+  @media (min-width: 1100px) {
+    .level-screen .task-split {
+      display: grid;
+      grid-template-columns: minmax(340px, 4fr) 6fr;
+      align-items: start;
+    }
+    .level-screen .task-side { border-right: 1px solid var(--border); }
+    .level-screen .task-side .task-statement { max-width: none; }
+    .level-screen .task-work { min-width: 0; }
+  }
+</style>
+
+<div class="frame">
+
+  <div class="mock-label">Экран 1 · Список курсов</div>
+  <div class="topbar">
+    <div class="logo">go<span class="go">practice</span><span class="cursor"></span></div>
+    <div class="xp-pill">☆ 30 XP</div>
+  </div>
+  <div class="courses-toolbar">
+    <input class="search-input" type="search" placeholder="Поиск по курсам и тегам…">
+    <div class="tag-row">
+      <button class="tag-chip" aria-pressed="true">go</button>
+      <button class="tag-chip" aria-pressed="false">основы</button>
+      <button class="tag-chip" aria-pressed="false">синтаксис</button>
+      <button class="tag-chip" aria-pressed="false">backend</button>
+    </div>
+  </div>
+  <div class="course-grid">
+    <div class="course-card">
+      <div class="eyebrow">курс 01</div>
+      <h2>Основы Go</h2>
+      <p>Первые шаги в Go: структура программы, переменные и типы, условия.</p>
+      <div class="course-tags"><span class="chip">go</span><span class="chip">основы</span><span class="chip">синтаксис</span></div>
+      <div class="bar" style="margin-bottom:10px"><i style="width:25%"></i></div>
+      <div class="course-meta"><span>1/4 уровней</span><span style="color:var(--gold)">30/65 XP</span></div>
+      <div class="course-stats"><span class="done">🏁 3 завершили</span><span>·</span><span class="active">👥 5 проходят</span></div>
+    </div>
+    <div class="course-card soon">
+      <div class="eyebrow" style="color:var(--muted)">скоро</div>
+      <h2>Циклы и коллекции</h2>
+      <p>for, слайсы (slices), карты (maps) — рабочие лошадки Go.</p>
+      <div class="course-tags"><span class="chip">go</span><span class="chip">коллекции</span></div>
+      <div class="bar" style="margin-bottom:10px"><i style="width:0%"></i></div>
+      <div class="course-meta"><span>0/6 уровней</span><span>0/120 XP</span></div>
+      <div class="course-stats"><span class="done">🏁 0 завершили</span><span>·</span><span class="active">👥 2 проходят</span></div>
+    </div>
+  </div>
+
+  <div class="mock-label">Экран 2 · Дерево курса</div>
+  <div class="topbar">
+    <div class="logo">go<span class="go">practice</span><span class="cursor"></span></div>
+    <div class="crumbs">Курсы / <b>Основы Go</b></div>
+    <div class="xp-pill">☆ 30 XP</div>
+  </div>
+  <div class="screen">
+    <div class="screen-head">
+      <div>
+        <h1>Основы Go</h1>
+        <p>Проходите уровни по порядку — каждый открывает следующие. Пунктирные уровни необязательные, но дают дополнительный XP.</p>
+      </div>
+      <div class="progress-block">
+        <div class="progress-row"><span>прогресс</span><b>1/4 · 10 XP</b></div>
+        <div class="bar"><i style="width:25%"></i></div>
+      </div>
+    </div>
+    <div class="tree-wrap map-wrap">
+      <div class="map-controls">
+        <button aria-label="Приблизить">+</button>
+        <button aria-label="Отдалить">−</button>
+        <button aria-label="Вся карта">⛶</button>
+        <button aria-label="К текущему уровню">◉</button>
+      </div>
+      <div class="legend map-legend">
+        <span><i class="dot c"></i>пройден</span>
+        <span><i class="dot a"></i>доступен</span>
+        <span><i class="dot"></i>закрыт</span>
+        <span><i class="dot b"></i>бонусная ветка</span>
+      </div>
+      <svg class="tree" viewBox="0 0 760 470" role="img" aria-label="Дерево уровней курса">
+        <!-- рёбра -->
+        <path class="edge done" d="M 380 132 C 380 165 380 175 380 205"/>
+        <path class="edge next to-locked" d="M 300 291 C 220 330 200 340 200 368"/>
+        <path class="edge next to-locked" d="M 460 291 C 540 330 560 340 560 368"/>
+        <!-- 01 · пройден -->
+        <g class="node completed">
+          <rect class="node-box" x="270" y="60" width="220" height="72" rx="12"/>
+          <circle class="badge-done" cx="302" cy="96" r="12"/>
+          <path d="M 296.5 96 l 4 4 l 7 -7.5" stroke="var(--accent-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <text class="node-title" x="326" y="91">Привет, Go!</text>
+          <text class="node-sub" x="326" y="110">тест ✓ · задачи 1/1</text>
+          <text class="node-xp" x="458" y="80" text-anchor="end">+10</text>
+        </g>
+        <!-- 02 · доступен -->
+        <g class="node available">
+          <rect class="node-box" x="270" y="205" width="220" height="86" rx="12"/>
+          <circle class="badge-play" cx="302" cy="248" r="12"/>
+          <path d="M 298.5 241.5 l 10 6.5 l -10 6.5 z" fill="var(--accent-ink)"/>
+          <text class="node-title" x="326" y="238">Переменные и типы</text>
+          <text class="node-sub" x="326" y="257">тест — · задачи 0/2</text>
+          <text class="node-sub" x="326" y="275" fill="var(--accent)">← вы здесь</text>
+          <text class="node-xp" x="458" y="225" text-anchor="end">+20</text>
+        </g>
+        <!-- 03 · закрыт -->
+        <g class="node locked">
+          <rect class="node-box" x="90" y="368" width="220" height="72" rx="12"/>
+          <g transform="translate(112, 392)">
+            <rect x="0" y="4" width="14" height="11" rx="2.5" fill="var(--locked)"/>
+            <path d="M 3 5 v -2.5 a 4 4 0 0 1 8 0 V 5" stroke="var(--locked)" stroke-width="2" fill="none"/>
+          </g>
+          <text class="node-title" x="146" y="399">Условия: if и switch</text>
+          <text class="node-sub" x="146" y="418">откроется после «Переменные»</text>
+          <text class="node-xp" x="278" y="388" text-anchor="end">+20</text>
+        </g>
+        <!-- 04 · бонус, закрыт -->
+        <g class="node locked bonus">
+          <rect class="node-box" x="450" y="368" width="220" height="72" rx="12"/>
+          <text x="472" y="401" font-size="15" fill="var(--gold)">★</text>
+          <text class="node-title" x="496" y="399">Бонус: fmt.Printf</text>
+          <text class="node-sub" x="496" y="418">необязательный уровень</text>
+          <text class="node-xp" x="638" y="388" text-anchor="end">+15</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="mock-label">Экран 3 · Уровень (вкладки интерактивны)</div>
+  <div class="topbar">
+    <div class="logo">go<span class="go">practice</span><span class="cursor"></span></div>
+    <div class="crumbs">Курсы / Основы Go / <b>Переменные и типы</b></div>
+    <div class="xp-pill">☆ 30 XP</div>
+  </div>
+  <div class="screen level-screen">
+    <div class="level-head">
+      <div class="eyebrow">уровень 02 · +20 xp</div>
+      <h1>Переменные и типы</h1>
+      <p class="sub">var, :=, базовые типы, нулевые значения, ввод через fmt.Scan</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="lesson" role="tab">Урок</button>
+      <button class="tab" data-tab="quiz" role="tab">Тест <span class="count">0/4</span></button>
+      <button class="tab" data-tab="tasks" role="tab">Задачи <span class="count">1/2</span></button>
+    </div>
+
+    <!-- Урок -->
+    <div class="tab-panel" id="panel-lesson">
+      <div class="lesson">
+        <p>Переменная (<em>variable</em>) — именованная ячейка для значения. Go — язык со статической типизацией: тип известен при компиляции и не меняется.</p>
+        <h2>Короткая форма :=</h2>
+<pre class="code"><span class="kw">package</span> main
+
+<span class="kw">import</span> <span class="str">"fmt"</span>
+
+<span class="kw">func</span> <span class="fn">main</span>() {
+    age := <span class="str">25</span>          <span class="com">// объявление + присваивание</span>
+    fmt.<span class="fn">Println</span>(age)
+}</pre>
+        <div class="callout"><span class="ico">i</span><span><code>:=</code> работает только внутри функций. На уровне пакета — полная форма <code>var</code>.</span></div>
+        <div class="callout warn"><span class="ico">!</span><span>Повторное <code>age := 30</code> в том же блоке — ошибка компиляции. Изменить значение — просто <code>age = 30</code>.</span></div>
+      </div>
+      <div class="panel-nav">
+        <button class="btn primary next" data-goto="quiz">К тесту →</button>
+      </div>
+    </div>
+
+    <!-- Тест -->
+    <div class="tab-panel" id="panel-quiz" hidden>
+      <div class="quiz">
+        <div class="q-card correct">
+          <div class="q-num">Вопрос 1 · один вариант</div>
+          <h3>Чем <code>:=</code> отличается от <code>=</code>?</h3>
+          <label class="opt"><input type="radio" name="q1" disabled><span>Ничем, это синонимы</span></label>
+          <label class="opt picked-right"><input type="radio" name="q1" checked disabled><span><code>:=</code> объявляет и присваивает, <code>=</code> присваивает существующей</span></label>
+          <div class="explain good"><b>✓</b><span class="body">Верно. <code>:=</code> — только внутри функций.</span></div>
+        </div>
+        <div class="q-card wrong">
+          <div class="q-num">Вопрос 2 · что выведет код</div>
+          <h3>Что выведет эта программа?</h3>
+<pre class="code"><span class="kw">var</span> n <span class="kw">int</span>
+fmt.<span class="fn">Println</span>(n)</pre>
+          <textarea class="answer-input" rows="2" disabled>nil</textarea>
+          <div class="explain bad"><b>✕</b><span class="body">Нулевое значение (<em>zero value</em>) для <code>int</code> — это <code>0</code>, а не <code>nil</code>.</span></div>
+        </div>
+        <div class="quiz-footer">
+          <button class="btn primary">Попробовать снова</button>
+          <span class="quiz-score">результат: <b>1/2</b> · нужно 2/2</span>
+        </div>
+      </div>
+      <div class="panel-nav">
+        <button class="btn ghost" data-goto="lesson">← К уроку</button>
+        <button class="btn primary next" data-goto="tasks">К задачам →</button>
+      </div>
+    </div>
+
+    <!-- Задачи -->
+    <div class="tab-panel" id="panel-tasks" hidden>
+      <!-- Задача 1: решена -->
+      <div class="task-card">
+        <div class="task-head">
+          <h3>Сумма двух чисел</h3>
+          <span class="chip done">✓ решена · 3 попытки</span>
+        </div>
+      </div>
+      <!-- Задача 2: провал с diff -->
+      <div class="task-card">
+        <div class="task-head">
+          <h3>Функция Sum</h3>
+          <span class="chip">unit-тесты</span>
+        </div>
+        <div class="task-split">
+          <div class="task-side">
+            <div class="task-statement">
+              <p>Реализуйте функцию <code>Sum(a, b int) int</code>, возвращающую сумму двух чисел.</p>
+            </div>
+          </div>
+          <div class="task-work">
+            <div class="editor">
+              <div class="editor-bar"><span>solution.go</span><span class="autosave">черновик сохранён ✓</span></div>
+<pre><span class="ln">1</span><span class="kw">package</span> main
+
+<span class="ln">2</span>
+<span class="ln">3</span><span class="com">// Sum возвращает сумму a и b.</span>
+<span class="ln">4</span><span class="kw">func</span> <span class="fn">Sum</span>(a, b <span class="kw">int</span>) <span class="kw">int</span> {
+<span class="ln">5</span>    <span class="kw">return</span> a - b
+<span class="ln">6</span>}</pre>
+            </div>
+            <div class="task-actions">
+              <button class="btn primary">▶ Проверить</button>
+              <button class="btn ghost">Сбросить к заготовке</button>
+            </div>
+            <div class="results">
+              <div class="res-row pass"><span class="res-ico">✓</span><span class="res-name">TestSumPositive</span><span class="res-time">12 мс</span></div>
+              <div class="res-row fail"><span class="res-ico">✕</span><span class="res-name">TestSumNegative</span><span class="res-time">9 мс</span></div>
+              <div class="diff">
+                <div class="exp"><div class="cap">ожидалось</div><pre>Sum(-2, -3) = -5</pre></div>
+                <div class="act"><div class="cap">получено</div><pre>Sum(-2, -3) = 1</pre></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Состояние: ошибка компиляции -->
+      <div class="task-card">
+        <div class="task-head">
+          <h3>Состояние: ошибка компиляции</h3>
+          <span class="chip">пример UI</span>
+        </div>
+        <div class="compile-error">
+          <div class="cap">ошибка компиляции</div>
+          <pre>main.go:6:2: undefined: fmt.Printn (did you mean fmt.Println?)</pre>
+        </div>
+      </div>
+      <!-- Состояние: проверка идёт -->
+      <div class="task-card">
+        <div class="task-head">
+          <h3>Состояние: идёт проверка</h3>
+          <span class="chip">пример UI</span>
+        </div>
+        <div class="task-actions">
+          <button class="btn primary" disabled><span class="spin"></span> Компилируем…</button>
+        </div>
+      </div>
+      <div class="panel-nav">
+        <button class="btn ghost" data-goto="quiz">← К тесту</button>
+      </div>
+    </div>
+
+    <!-- Баннер завершения -->
+    <div class="win-banner">
+      <span class="big">🎉</span>
+      <div>
+        <h3>Уровень пройден! +20 XP</h3>
+        <p>Открылись уровни «Условия: if и switch» и «Бонус: fmt.Printf».</p>
+      </div>
+      <button class="btn primary">К дереву курса →</button>
+    </div>
+  </div>
+
+  <div class="mock-label">Экран 4 · Уровень: workspace (широкий экран, ≥1100px)</div>
+  <style>
+    /* Workspace: полноэкранный двухпанельный режим уровня.
+       Слева сайдбар разделов + контент, справа зоны IDE/Заметки,
+       между панелями draggable-сплиттер, рейл зон — у правого края. */
+    .ws-demo {
+      display: grid;
+      grid-template-columns: 200px 44% 6px 1fr 40px;
+      height: 540px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow); background: var(--bg);
+      margin-bottom: 24px;
+    }
+    .ws-nav {
+      border-right: 1px solid var(--border); background: var(--panel);
+      overflow-y: auto; padding: 12px 8px; display: flex; flex-direction: column; gap: 2px;
+    }
+    .ws-level-head { padding: 2px 10px 10px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .ws-level-head h2 { margin: 0; font-size: 14px; font-weight: 650; }
+    .ws-item {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 13px; padding: 7px 10px;
+      border-radius: var(--radius-sm); cursor: pointer;
+    }
+    .ws-item:hover { color: var(--text); background: var(--panel-2); }
+    .ws-item.active {
+      color: var(--text); background: var(--accent-soft); font-weight: 600;
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+    .ws-item .lab { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ws-item .tick { color: var(--success); font-size: 12px; }
+    .ws-item .count {
+      font-family: var(--font-mono); font-size: 10.5px;
+      background: var(--panel-2); border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 999px;
+    }
+    .ws-divider {
+      display: flex; justify-content: space-between;
+      margin: 10px 10px 4px;
+      font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .ws-left { overflow-y: auto; padding: 18px 22px; min-width: 0; }
+    /* контент панели — читабельная колонка по центру */
+    .ws-left > * { max-width: 78ch; margin-inline: auto; }
+    .ws-task-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .ws-task-head h2 { margin: 0; font-size: 17px; font-weight: 650; }
+    .ws-splitter { cursor: col-resize; background: var(--border); }
+    .ws-splitter:hover { background: var(--accent); }
+    .ws-right { min-width: 0; display: flex; flex-direction: column; padding: 12px 14px; background: var(--panel); gap: 10px; overflow: hidden; }
+    .ws-right .editor { display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0; }
+    .ws-right .editor pre { flex: 1; margin: 0; }
+    .ws-right .results { overflow-y: auto; max-height: 42%; }
+    .ws-rail {
+      border-left: 1px solid var(--border); background: var(--panel);
+      display: flex; flex-direction: column; gap: 6px; padding: 8px 3px;
+    }
+    .ws-rail-btn {
+      width: 34px; height: 34px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); cursor: pointer;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+    }
+    .ws-rail-btn:hover { color: var(--text); background: var(--panel-2); }
+    .ws-rail-btn.active { color: var(--accent); background: var(--accent-soft); box-shadow: inset -2px 0 0 var(--accent); }
+    /* Зона «Заметки»: имя {курс} — {модуль} — {уровень}, редактор + предпросмотр */
+    .notes-bar { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+    .notes-bar .grow { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .notes-bar .saved { color: var(--success); }
+    .notes-area {
+      flex: 1; font-family: var(--font-mono); font-size: 13px; line-height: 1.6;
+      background: var(--code-bg); color: var(--text); white-space: pre-wrap;
+      border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+      padding: 12px 14px; margin: 0; overflow-y: auto;
+    }
+  </style>
+  <!-- Состояние: выбрана задача → слева условие, справа IDE -->
+  <div class="ws-demo">
+    <div class="ws-nav">
+      <div class="ws-level-head">
+        <div class="eyebrow">уровень 02 · +20 xp</div>
+        <h2>Переменные и типы</h2>
+      </div>
+      <div class="ws-item"><span class="lab">Теория</span></div>
+      <div class="ws-item"><span class="lab">Тест</span><span class="count">4</span></div>
+      <div class="ws-divider"><span>Задачи</span><span>1/2</span></div>
+      <div class="ws-item"><span class="lab">Сумма двух чисел</span><span class="tick">✓</span></div>
+      <div class="ws-item active"><span class="lab">Функция Sum</span></div>
+    </div>
+    <div class="ws-left">
+      <div class="ws-task-head">
+        <h2>Функция Sum</h2>
+        <span class="chip">unit-тесты</span>
+      </div>
+      <p>Реализуйте функцию <code>Sum(a, b int) int</code>, возвращающую сумму двух чисел. Функция должна корректно работать с отрицательными числами.</p>
+      <div class="callout"><span class="ico">i</span><span>Выбор задачи слева открывает её шаблон в IDE справа. Черновики сохраняются автоматически.</span></div>
+    </div>
+    <div class="ws-splitter" title="Перетащите, чтобы изменить ширину"></div>
+    <div class="ws-right">
+      <div class="editor">
+        <div class="editor-bar"><span>solution.go</span><span>Функция Sum</span><span class="autosave">черновик сохранён ✓</span></div>
+<pre><span class="ln">1</span><span class="kw">package</span> main
+<span class="ln">2</span>
+<span class="ln">3</span><span class="com">// Sum возвращает сумму a и b.</span>
+<span class="ln">4</span><span class="kw">func</span> <span class="fn">Sum</span>(a, b <span class="kw">int</span>) <span class="kw">int</span> {
+<span class="ln">5</span>    <span class="kw">return</span> a - b
+<span class="ln">6</span>}</pre>
+      </div>
+      <div class="task-actions" style="padding:0">
+        <button class="btn primary">▶ Проверить</button>
+        <button class="btn ghost">Сбросить к заготовке</button>
+        <button class="btn ghost">🎓 спросить наставника</button>
+      </div>
+      <div class="results">
+        <div class="res-row pass"><span class="res-ico">✓</span><span class="res-name">TestSumPositive</span><span class="res-time">12 мс</span></div>
+        <div class="res-row fail"><span class="res-ico">✕</span><span class="res-name">TestSumNegative</span><span class="res-time">9 мс</span></div>
+      </div>
+    </div>
+    <div class="ws-rail">
+      <div class="ws-rail-btn active" title="IDE">&lt;/&gt;</div>
+      <div class="ws-rail-btn" title="Заметки">✎</div>
+    </div>
+  </div>
+  <!-- Состояние: теория слева, заметки справа -->
+  <div class="ws-demo" style="height: 380px">
+    <div class="ws-nav">
+      <div class="ws-level-head">
+        <div class="eyebrow">уровень 02 · +20 xp</div>
+        <h2>Переменные и типы</h2>
+      </div>
+      <div class="ws-item active"><span class="lab">Теория</span></div>
+      <div class="ws-item"><span class="lab">Тест</span><span class="count">4</span></div>
+      <div class="ws-divider"><span>Задачи</span><span>1/2</span></div>
+      <div class="ws-item"><span class="lab">Сумма двух чисел</span><span class="tick">✓</span></div>
+      <div class="ws-item"><span class="lab">Функция Sum</span></div>
+    </div>
+    <div class="ws-left">
+      <div class="lesson">
+        <p>Переменная (<em>variable</em>) — именованная ячейка для значения. Go — язык со статической типизацией: тип известен при компиляции и не меняется.</p>
+        <div class="callout"><span class="ico">i</span><span><code>:=</code> работает только внутри функций. На уровне пакета — полная форма <code>var</code>.</span></div>
+      </div>
+    </div>
+    <div class="ws-splitter"></div>
+    <div class="ws-right">
+      <div class="notes-bar">
+        <span class="grow">Язык Go — Основы — Переменные и типы</span>
+        <button class="btn ghost" style="font-size:12px;padding:4px 10px">Предпросмотр</button>
+        <span class="saved">заметка сохранена ✓</span>
+      </div>
+      <pre class="notes-area"># := vs =
+
+- `:=` объявляет и присваивает (только в функциях)
+- `=` присваивает уже объявленной
+- нулевое значение int — `0`, не nil!</pre>
+    </div>
+    <div class="ws-rail">
+      <div class="ws-rail-btn" title="IDE">&lt;/&gt;</div>
+      <div class="ws-rail-btn active" title="Заметки">✎</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Интерактивные вкладки макета
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.hidden = true);
+      document.getElementById('panel-' + tab.dataset.tab).hidden = false;
+    });
+  });
+  // Кнопки «дальше/назад» внизу вкладок
+  document.querySelectorAll('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () =>
+      document.querySelector(`.tab[data-tab="${btn.dataset.goto}"]`).click());
+  });
+</script>

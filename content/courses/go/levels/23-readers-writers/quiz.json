@@ -1,0 +1,80 @@
+{
+  "passScore": 1.0,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Что описывает интерфейс `io.Writer`?",
+      "options": [
+        "Любое место, куда можно записать байты: единственный метод `Write(p []byte) (int, error)`",
+        "Только файлы на диске",
+        "Тип, который умеет красиво печатать структуры",
+        "Функцию форматирования строк"
+      ],
+      "answer": 0,
+      "explanation": "`io.Writer` — контракт из одного метода `Write`. Его реализуют терминал `os.Stdout`, файлы, сетевые соединения, `bytes.Buffer` — всё, куда можно отправить байты. Поэтому функции, принимающие `io.Writer`, работают с любым из них."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Чем `fmt.Fprintln(w, \"привет\")` отличается от `fmt.Println(\"привет\")`?",
+      "options": [
+        "Fprintln не переводит строку",
+        "Fprintln печатает в переданный io.Writer, а Println — всегда в os.Stdout (и это частный случай Fprintln)",
+        "Fprintln возвращает строку, а не печатает",
+        "Ничем: это синонимы"
+      ],
+      "answer": 1,
+      "explanation": "Семейство `Fprint`/`Fprintf`/`Fprintln` принимает первым аргументом «куда» — любой `io.Writer`: терминал, файл, буфер. `fmt.Println(...)` — сокращение для `fmt.Fprintln(os.Stdout, ...)`."
+    },
+    {
+      "id": "q3",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport (\n    \"bytes\"\n    \"fmt\"\n)\n\nfunc main() {\n    var buf bytes.Buffer\n    fmt.Fprintf(&buf, \"%d + %d = %d\", 2, 3, 2+3)\n    buf.WriteString(\"!\")\n    fmt.Println(buf.String())\n}",
+      "answer": "2 + 3 = 5!\n",
+      "explanation": "Буфер копит всё записанное: сначала `Fprintf` положил в него «2 + 3 = 5», потом `WriteString` добавил «!». `buf.String()` отдаёт накопленное одной строкой — печатается `2 + 3 = 5!`."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Почему в `fmt.Fprintf(&buf, ...)` буфер передаётся с амперсандом, а не просто `buf`?",
+      "options": [
+        "Для скорости: копировать буфер дорого",
+        "Метод Write объявлен у *bytes.Buffer (получатель-указатель), поэтому io.Writer реализует только указатель",
+        "Это требование синтаксиса Fprintf для любых аргументов",
+        "Амперсанд не обязателен, оба варианта работают"
+      ],
+      "answer": 1,
+      "explanation": "`Write` меняет содержимое буфера, поэтому объявлен с получателем-указателем — а указательные методы входят в набор методов только `*T`. `io.Writer` реализует `*bytes.Buffer`, но не `bytes.Buffer`: без амперсанда — ошибка `does not implement`."
+    },
+    {
+      "id": "q5",
+      "type": "multi",
+      "prompt": "Отметьте все ВЕРНЫЕ утверждения:",
+      "options": [
+        "`os.Stdout` реализует io.Writer — в него можно писать через Fprintf",
+        "`strings.NewReader(\"текст\")` превращает строку в io.Reader",
+        "`io.ReadAll(r)` читает поток до конца и возвращает срез байтов",
+        "io.Reader умеет читать только из файлов"
+      ],
+      "answers": [0, 1, 2],
+      "explanation": "Reader — это ЛЮБОЙ источник байтов: строка через `strings.NewReader`, файл, сеть, клавиатура, — поэтому последнее утверждение неверно. Остальные три — рабочий набор этого уровня."
+    },
+    {
+      "id": "q6",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport \"fmt\"\n\ntype CountWriter struct {\n    Total int\n}\n\nfunc (w *CountWriter) Write(p []byte) (int, error) {\n    w.Total += len(p)\n    return len(p), nil\n}\n\nfunc main() {\n    cw := &CountWriter{}\n    fmt.Fprint(cw, \"go-go-go\")\n    fmt.Println(cw.Total)\n}",
+      "answer": "8\n",
+      "explanation": "`CountWriter` — самодельный io.Writer: вместо записи он считает байты. `Fprint` отправил в него строку «go-go-go» — 8 байт (все символы латинские, по байту каждый). Кстати, будь строка кириллической, байтов оказалось бы вдвое больше символов."
+    },
+    {
+      "id": "q7",
+      "type": "blank",
+      "prompt": "Впишите имя функции пакета io, которая читает читателя до конца и возвращает все байты: `data, err := io.___(r)`",
+      "answers": ["ReadAll"],
+      "explanation": "`io.ReadAll(r)` выпивает Reader до дна и возвращает `[]byte` и ошибку. Низкоуровневый `Read` с ручным буфером в повседневном коде почти не нужен."
+    }
+  ]
+}

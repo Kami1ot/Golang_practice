@@ -1,0 +1,8 @@
+{
+  "id": "38-json",
+  "title": "encoding/json в деле",
+  "summary": "JSON по-взрослому: omitempty и «-», вложенные структуры, Decoder/Encoder из потока и разбор JSON неизвестной формы",
+  "requires": ["37-files"],
+  "xp": 20,
+  "group": "Стандартная библиотека"
+}

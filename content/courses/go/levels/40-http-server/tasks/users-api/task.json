@@ -1,0 +1,13 @@
+{
+  "id": "users-api",
+  "type": "unittest",
+  "title": "Мини-API: ping и пользователи",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 20,
+  "hints": [
+    "Два шаблона с методом: mux.HandleFunc(\"GET /ping\", ...) и mux.HandleFunc(\"GET /users/{id}\", ...). Значение {id} в хендлере отдаёт r.PathValue(\"id\") — строкой.",
+    "Ветки /users/{id} по порядку: strconv.Atoi вернул ошибку → http.Error(w, ..., http.StatusBadRequest) и return; id нет в мапе (ok-идиома) → http.Error(w, ..., http.StatusNotFound) и return; нашёлся → отдать JSON.",
+    "JSON-ответ — как в уроке: сначала w.Header().Set(\"Content-Type\", \"application/json\"), потом json.NewEncoder(w).Encode(u). Заголовок после записи тела молча потеряется — и не забывайте return после каждого http.Error."
+  ]
+}

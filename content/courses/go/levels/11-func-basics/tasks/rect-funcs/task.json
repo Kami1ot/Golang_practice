@@ -1,0 +1,19 @@
+{
+  "id": "rect-funcs",
+  "type": "io",
+  "title": "Периметр и площадь",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "пример из условия", "stdin": "3 4\n", "stdout": "14\n12\n", "hidden": false },
+    { "name": "квадрат 1 на 1", "stdin": "1 1\n", "stdout": "4\n1\n", "hidden": true },
+    { "name": "нулевая сторона", "stdin": "0 5\n", "stdout": "10\n0\n", "hidden": true },
+    { "name": "большие значения", "stdin": "100000 200000\n", "stdout": "600000\n20000000000\n", "hidden": true }
+  ],
+  "hints": [
+    "Обе функции объявите РЯДОМ с main, а не внутри неё — как в примерах урока. В main останутся только чтение и два вызова.",
+    "Чтение одной строки с двумя числами: `var w, h int; fmt.Scan(&w, &h)`. Дальше `fmt.Println(Perimeter(w, h))`, затем `fmt.Println(Area(w, h))`.",
+    "Каждая функция — одна строка: `return 2 * (w + h)` для периметра и `return w * h` для площади."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "sum-ints",
+  "type": "unittest",
+  "title": "Сумма только целых",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "Цикл по слайсу + безопасная ok-форма assertion: `n, ok := v.(int)` — если ok, прибавляем n, иначе просто идём дальше.",
+    "Каркас: `total := 0; for _, v := range values { if n, ok := v.(int); ok { total += n } }; return total`. Паникующую одиночную форму `v.(int)` здесь использовать нельзя — в слайсе есть не-целые."
+  ]
+}

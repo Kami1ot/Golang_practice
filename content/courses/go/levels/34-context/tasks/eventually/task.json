@@ -1,0 +1,13 @@
+{
+  "id": "eventually",
+  "type": "unittest",
+  "title": "Ответ или таймаут ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "Создайте контекст со сроком: `ctx, cancel := context.WithTimeout(context.Background(), timeout)` и обязательно `defer cancel()`.",
+    "Дальше один select на два случая: `case v := <-result: return v, nil` и `case <-ctx.Done(): return \"\", ctx.Err()` — кто первый, того и ответ.",
+    "Возвращайте именно ctx.Err(), а не свою ошибку: тесты проверяют errors.Is(err, context.DeadlineExceeded) — стандартную ошибку истёкшего срока."
+  ]
+}

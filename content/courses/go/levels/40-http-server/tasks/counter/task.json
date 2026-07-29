@@ -1,0 +1,13 @@
+{
+  "id": "counter",
+  "type": "unittest",
+  "title": "Счётчик с общим состоянием ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 20,
+  "hints": [
+    "Состояние — значение counter, созданное внутри NewCounter: хендлеры-замыкания видят c, а каждый новый вызов NewCounter даёт свежий счётчик. Глобальная переменная провалит тест на независимость.",
+    "POST /add: объявите переменную req типа addRequest и декодируйте json.NewDecoder(r.Body).Decode(&req); ошибка → http.Error(w, ..., http.StatusBadRequest) и return; дальше c.mu.Lock(), c.total += req.N, c.mu.Unlock().",
+    "GET /total: прочитайте сумму под замком в локальную переменную и отпустите замок, затем w.Header().Set(\"Content-Type\", \"application/json\") и json.NewEncoder(w).Encode(totalResponse{Total: v}). Без мьютекса конкурентный тест насчитает меньше положенного."
+  ]
+}

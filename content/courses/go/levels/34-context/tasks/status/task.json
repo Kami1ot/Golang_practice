@@ -1,0 +1,12 @@
+{
+  "id": "status",
+  "type": "unittest",
+  "title": "Жив или отменён?",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 15,
+  "hints": [
+    "Неблокирующая проверка канала — select с default, как на уровне про select. Здесь канал — ctx.Done().",
+    "Каркас: `select { case <-ctx.Done(): return \"отменено\"; default: return \"работаем\" }`. У живого контекста Done ещё не закрыт — срабатывает default."
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "23-readers-writers",
+  "title": "io.Reader и io.Writer",
+  "summary": "Универсальные потоки байтов: Fprintf в любой Writer, ReadAll из любого Reader, свой Writer",
+  "requires": ["22-stringer"],
+  "xp": 25,
+  "group": "Интерфейсы"
+}

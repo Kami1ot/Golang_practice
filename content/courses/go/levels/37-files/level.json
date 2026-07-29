@@ -1,0 +1,8 @@
+{
+  "id": "37-files",
+  "title": "Файлы: os и bufio",
+  "summary": "Читаем и пишем файлы: os.ReadFile и WriteFile, os.Open с defer Close, построчный bufio.Scanner и Flush",
+  "requires": ["36-time"],
+  "xp": 20,
+  "group": "Стандартная библиотека"
+}

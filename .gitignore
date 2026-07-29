@@ -1,0 +1,15 @@
+# Binaries
+*.exe
+*.exe~
+/gopractice
+
+# Runtime artifacts
+.run/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+desktop.ini

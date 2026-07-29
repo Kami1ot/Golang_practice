@@ -1,0 +1,13 @@
+{
+  "id": "grep",
+  "type": "unittest",
+  "title": "Мини-grep ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "Два файла — две связки из урока: источник открывайте os.Open + bufio.Scanner (и defer Close), приёмник создавайте os.Create + bufio.NewWriter (и тоже defer Close). Фильтр строк — strings.Contains(line, substr).",
+    "Каркас цикла: `for sc.Scan() { line := sc.Text(); if strings.Contains(line, substr) { fmt.Fprintln(w, line); count++ } }`. После цикла проверьте sc.Err().",
+    "Финальный аккорд — w.Flush() ПЕРЕД возвратом: без него хвост строк останется в буфере и до dst не доедет (тест на содержимое это поймает). Ошибку открытия источника возвращайте как есть или через %w — тесты проверяют errors.Is(err, fs.ErrNotExist)."
+  ]
+}

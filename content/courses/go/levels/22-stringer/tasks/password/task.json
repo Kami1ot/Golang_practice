@@ -1,0 +1,13 @@
+{
+  "id": "password",
+  "type": "unittest",
+  "title": "Своя ошибка: короткий пароль ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "Задача из двух половин. Первая: `Error()` собирает сообщение через `fmt.Sprintf` из полей `e.Got` и `e.Min` (нужен `import \"fmt\"`). Вторая: `CheckPassword` сравнивает длину с 8 и возвращает либо ошибку, либо nil.",
+    "Длина в СИМВОЛАХ — это уровень про строки и руны: `len(password)` даст байты, а кириллица занимает 2 байта на букву. Считайте `len([]rune(password))`.",
+    "Каркас CheckPassword: `n := len([]rune(password))`; если `n < 8` — `return LengthError{Got: n, Min: 8}`; иначе `return nil`. Структура сама уедет в интерфейс error, как Rect уезжал в Shape."
+  ]
+}

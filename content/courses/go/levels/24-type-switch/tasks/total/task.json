@@ -1,0 +1,13 @@
+{
+  "id": "total",
+  "type": "unittest",
+  "title": "Сумма всех чисел ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "Здесь удобнее type switch, чем два assertion'а: `switch n := v.(type)` с ветками `case int:` и `case float64:`.",
+    "Ветки должны быть ОТДЕЛЬНЫМИ: в общей ветке `case int, float64:` переменная останется any, и сложить её не выйдет. В ветке int не забудьте конвертацию: `total += float64(n)`.",
+    "Каркас: `total := 0.0; for _, v := range values { switch n := v.(type) { case int: total += float64(n); case float64: total += n } }; return total`."
+  ]
+}

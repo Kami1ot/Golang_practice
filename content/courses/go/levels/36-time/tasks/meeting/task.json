@@ -1,0 +1,13 @@
+{
+  "id": "meeting",
+  "type": "unittest",
+  "title": "Планировщик встреч",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "ParseMeeting — конвейер из двух разборов: time.Parse(Layout, date) даёт начало, time.ParseDuration(dur) — длительность, а конец — это start.Add(d). После каждого разбора проверяйте ошибку.",
+    "При любой ошибке возвращайте оба времени нулевыми: `return time.Time{}, time.Time{}, err` — сам err пробрасывайте как есть, без обёрток. Тесты проверяют, что при кривом вводе ошибка не nil, а времена — нулевые.",
+    "IsWeekend: у момента есть t.Weekday() типа time.Weekday. Суббота или воскресенье — `wd := t.Weekday(); return wd == time.Saturday || wd == time.Sunday`."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "04-bonus-fmt",
+  "title": "Бонус: форматированный вывод",
+  "summary": "fmt.Printf и глаголы %d %s %f %v %T %q, ширина и точность, Sprintf, экранирование",
+  "requires": ["02-variables"],
+  "optional": true,
+  "xp": 15,
+  "group": "Основы"
+}

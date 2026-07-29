@@ -1,0 +1,82 @@
+{
+  "passScore": 1.0,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Дано: `type Car struct { Engine; Brand string }`, у `Engine` есть поле `Power`. Как прочитать мощность у переменной `car`?",
+      "options": [
+        "Только `car.Engine.Power` — у встроенного поля нет короткой записи",
+        "Только `car.Power` — полное имя после встраивания перестаёт работать",
+        "И `car.Power`, и `car.Engine.Power` — это одно и то же поле",
+        "`car.Power()` — при встраивании поля превращаются в методы"
+      ],
+      "answer": 2,
+      "explanation": "Поле продвинулось (*promotion*), поэтому работает короткое `car.Power`. Но полное имя `car.Engine.Power` никуда не делось — обе записи обращаются к одному и тому же полю."
+    },
+    {
+      "id": "q2",
+      "type": "output",
+      "prompt": "Что выведет эта программа?",
+      "code": "package main\n\nimport \"fmt\"\n\ntype Engine struct {\n    Power int\n}\n\nfunc (e Engine) Start() string {\n    return fmt.Sprintf(\"заведён на %d л.с.\", e.Power)\n}\n\ntype Car struct {\n    Engine\n    Brand string\n}\n\nfunc main() {\n    c := Car{Engine: Engine{Power: 90}, Brand: \"Gopher\"}\n    fmt.Println(c.Power)\n    fmt.Println(c.Start())\n}",
+      "answer": "90\nзаведён на 90 л.с.",
+      "explanation": "И поле `Power`, и метод `Start` продвинулись из `Engine`: `c.Power` читает поле встроенной структуры (90), а `c.Start()` вызывает её метод, который форматирует строку с этим же значением."
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "В `type AB struct { A; B }` оба встроенных типа имеют поле `Name`. Когда компилятор сообщит об ошибке?",
+      "options": [
+        "Сразу при объявлении типа `AB` — такие типы запрещены",
+        "Только при обращении к короткому имени `x.Name`",
+        "При обращении к полному имени `x.A.Name`",
+        "Никогда: Go возьмёт поле из типа, встроенного первым"
+      ],
+      "answer": 1,
+      "explanation": "Объявлять такой тип можно, и полные имена `x.A.Name` / `x.B.Name` работают. Ошибка `ambiguous selector` появится только там, где вы напишете короткое `x.Name`, — компилятор не гадает, какое из двух полей вы имели в виду."
+    },
+    {
+      "id": "q4",
+      "type": "multi",
+      "prompt": "Отметьте все ВЕРНЫЕ утверждения о встраивании:",
+      "options": [
+        "Методы встроенного типа продвигаются, в том числе с указательным получателем (*pointer receiver*)",
+        "Встроенный тип получает доступ к полям внешнего",
+        "Полное имя `car.Engine.Power` продолжает работать и после продвижения",
+        "Встраивание — это наследование, как в других языках",
+        "Собственный метод внешнего типа перекрывает продвинутый с тем же именем"
+      ],
+      "answers": [0, 2, 4],
+      "explanation": "Продвигаются и поля, и методы (включая pointer receiver), полное имя всегда доступно, а своё имя внешнего типа затеняет продвинутое. Неверно обратное направление: внутренний тип НЕ знает о внешнем и до его полей не дотягивается. И это не наследование — виртуальных методов нет, есть композиция."
+    },
+    {
+      "id": "q5",
+      "type": "output",
+      "prompt": "Что выведет эта программа? Обратите внимание, чьё поле `Label` видит метод `Show`.",
+      "code": "package main\n\nimport \"fmt\"\n\ntype Base struct {\n    Label string\n}\n\nfunc (b Base) Show() string {\n    return \"base: \" + b.Label\n}\n\ntype Box struct {\n    Base\n    Label string\n}\n\nfunc main() {\n    x := Box{Base: Base{Label: \"внутри\"}, Label: \"снаружи\"}\n    fmt.Println(x.Label)\n    fmt.Println(x.Base.Label)\n    fmt.Println(x.Show())\n}",
+      "answer": "снаружи\nвнутри\nbase: внутри",
+      "explanation": "Собственное поле `Box.Label` затеняет продвинутое, поэтому `x.Label` — «снаружи», а внутреннее достаётся полным именем `x.Base.Label`. Метод `Show` живёт в `Base` и видит ТОЛЬКО поля `Base`: про «снаружи» он даже не подозревает — печатает «base: внутри»."
+    },
+    {
+      "id": "q6",
+      "type": "blank",
+      "prompt": "У `Employee` есть собственный метод `Greet`, перекрывающий продвинутый из встроенного `Person`. Впишите пропуск, чтобы вызвать ИМЕННО внутренний вариант: `e.___.Greet()`",
+      "answers": ["Person"],
+      "caseSensitive": true,
+      "explanation": "Затенённый метод не исчезает — он доступен через полное имя: `e.Person.Greet()`. Имя встроенного поля совпадает с именем типа, поэтому в пропуске — `Person`."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Дано: `func (a *Account) Deposit(n int)` и `type SavingsAccount struct { Account; Rate int }`. Что произойдёт при вызове `s.Deposit(100)`, где `s` — переменная типа `SavingsAccount`?",
+      "options": [
+        "Ошибка компиляции: метод объявлен у `*Account`, а не у `SavingsAccount`",
+        "Метод продвинулся: Go сам возьмёт адрес `s.Account`, баланс изменится",
+        "Изменится копия, `s.Balance` останется прежним",
+        "Паника во время выполнения"
+      ],
+      "answer": 1,
+      "explanation": "Методы с указательным получателем тоже продвигаются. Раз `s` — переменная (адресуемое значение), Go автоматически подставит `(&s.Account).Deposit(100)`, и изменение баланса сохранится в `s`."
+    }
+  ]
+}

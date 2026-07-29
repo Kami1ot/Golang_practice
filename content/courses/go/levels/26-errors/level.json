@@ -1,0 +1,8 @@
+{
+  "id": "26-errors",
+  "title": "Ошибки: if err != nil",
+  "summary": "errors.New и fmt.Errorf, ранний выход, пробрасывание наверх — главная идиома Go в деталях",
+  "requires": ["24-type-switch"],
+  "xp": 25,
+  "group": "Обработка ошибок"
+}

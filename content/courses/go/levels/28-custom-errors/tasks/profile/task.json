@@ -1,0 +1,13 @@
+{
+  "id": "profile",
+  "type": "unittest",
+  "title": "Три вида ошибок в одной функции ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "Три проверки по порядку: пустое имя → сразу ErrEmptyName; ok-идиома по карте → NotFoundError{Name: name}; статус \"banned\" → обёртка fmt.Errorf(\"доступ к %s: %w\", name, ErrBanned).",
+    "NotFoundError.Error() соберите через fmt.Sprintf(\"профиль %q не найден\", e.Name) — глагол %q сам добавит кавычки.",
+    "Для заблокированного тесты требуют и текст `доступ к vasya: пользователь заблокирован`, и errors.Is(err, ErrBanned) == true — значит, оборачивать нужно глаголом %w."
+  ]
+}

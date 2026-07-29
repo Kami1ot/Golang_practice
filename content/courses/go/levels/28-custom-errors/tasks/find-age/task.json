@@ -1,0 +1,13 @@
+{
+  "id": "find-age",
+  "type": "unittest",
+  "title": "Sentinel в деле",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 15,
+  "hints": [
+    "Ok-идиома карт с уровня про map: `age, ok := users[name]` — второй результат говорит, есть ли ключ.",
+    "При отсутствии возвращайте именно ErrUserNotFound — тот самый, объявленный наверху, а НЕ новый errors.New с тем же текстом: тесты проверяют errors.Is.",
+    "Каркас: `age, ok := users[name]; if !ok { return 0, ErrUserNotFound }; return age, nil`."
+  ]
+}

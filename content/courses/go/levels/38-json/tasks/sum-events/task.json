@@ -1,0 +1,13 @@
+{
+  "id": "sum-events",
+  "type": "unittest",
+  "title": "Поток событий ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 15,
+  "hints": [
+    "Соберите декодер один раз до цикла: `dec := json.NewDecoder(r)` — и крутите `for dec.More() { ... }`: More вернёт false, когда события в потоке кончатся.",
+    "Внутри цикла: `var e Event`, затем `if err := dec.Decode(&e); err != nil { return nil, err }` — и прибавляйте `e.N` к `m[e.Kind]`. Карту создайте через make ДО цикла.",
+    "У обращения `m[e.Kind] += e.N` нет подводных камней: для нового kind карта выдаст нулевое значение int. Пустой поток просто не зайдёт в цикл — вернётся пустая карта и nil."
+  ]
+}

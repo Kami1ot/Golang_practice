@@ -1,0 +1,9 @@
+{
+  "id": "03-conditions",
+  "title": "Условия: if и switch",
+  "summary": "bool, операторы сравнения и логики, if/else, короткое объявление в if, switch, оператор %",
+  "requires": ["02-variables"],
+  "optional": false,
+  "xp": 20,
+  "group": "Основы"
+}

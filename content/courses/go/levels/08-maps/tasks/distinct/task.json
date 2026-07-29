@@ -1,0 +1,20 @@
+{
+  "id": "distinct",
+  "type": "io",
+  "title": "Сколько разных",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "пример из условия", "stdin": "5\n1 2 2 3 1\n", "stdout": "3\n", "hidden": false },
+    { "name": "пустой ввод", "stdin": "0\n", "stdout": "0\n", "hidden": true },
+    { "name": "все одинаковые", "stdin": "4\n7 7 7 7\n", "stdout": "1\n", "hidden": true },
+    { "name": "отрицательные и ноль", "stdin": "6\n-1 1 -1 2 0 0\n", "stdout": "4\n", "hidden": true },
+    { "name": "одно число", "stdin": "1\n100\n", "stdout": "1\n", "hidden": true }
+  ],
+  "hints": [
+    "Паттерн «множество» из урока: карта `map[int]bool`, каждому прочитанному числу — `seen[x] = true`.",
+    "Повторная запись по тому же ключу не создаёт новую пару — в карте останутся только уникальные ключи. Ответ — `len(seen)`.",
+    "Не забудьте `make`: `seen := make(map[int]bool)` — запись в nil-карту уронит программу паникой."
+  ]
+}

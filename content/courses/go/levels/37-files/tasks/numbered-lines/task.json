@@ -1,0 +1,18 @@
+{
+  "id": "numbered-lines",
+  "type": "io",
+  "title": "Нумератор строк",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "пример из условия", "stdin": "чай\nкофе\nкакао\n", "stdout": "1: чай\n2: кофе\n3: какао\n", "hidden": false },
+    { "name": "пустой ввод", "stdin": "", "stdout": "", "hidden": true },
+    { "name": "одна строка", "stdin": "go\n", "stdout": "1: go\n", "hidden": true },
+    { "name": "пробелы и кириллица", "stdin": "  два  пробела\nпривет, мир!\nab cd\n", "stdout": "1:   два  пробела\n2: привет, мир!\n3: ab cd\n", "hidden": true }
+  ],
+  "hints": [
+    "Сканер по стандартному вводу из урока: `sc := bufio.NewScanner(os.Stdin)`, дальше цикл `for sc.Scan()` — он сам остановится на конце ввода.",
+    "Счётчик заведите до цикла и увеличивайте на каждой строке; печать — `fmt.Printf(\"%d: %s\\n\", n, sc.Text())`. Никаких fmt.Scan: только Scanner сохранит строку с пробелами целиком."
+  ]
+}

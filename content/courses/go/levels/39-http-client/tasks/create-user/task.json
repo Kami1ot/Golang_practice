@@ -1,0 +1,13 @@
+{
+  "id": "create-user",
+  "type": "unittest",
+  "title": "CreateUser: отправить JSON ⭐",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 20,
+  "hints": [
+    "Три шага: data, err := json.Marshal(u) → http.Post(baseURL+\"/users\", \"application/json\", bytes.NewReader(data)) → проверить статус. Ошибку Marshal тоже верните, не глотайте.",
+    "Успех здесь — именно http.StatusCreated (201), а не StatusOK: сравнивайте с ним. Любой другой код, даже 200, — fmt.Errorf(\"неожиданный статус: %d\", resp.StatusCode).",
+    "Для ответа заведите структуру с полем ID int и тегом json:\"id\" (можно анонимную через var reply struct{...}), декодируйте json.NewDecoder(resp.Body).Decode(&reply) и верните reply.ID."
+  ]
+}

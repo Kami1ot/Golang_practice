@@ -1,0 +1,13 @@
+{
+  "id": "sum-until",
+  "type": "unittest",
+  "title": "Работник, уважающий отмену",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "Каркас «рабочей лошадки» из урока: `for { select { ... } }` с двумя ветками — приём из ch и `<-ctx.Done()`.",
+    "Ветка канала — с ok-идиомой: `case v, ok := <-ch: if !ok { return total }; total += v` — закрытие канала тоже завершает работу.",
+    "Ветка отмены просто возвращает накопленное: `case <-ctx.Done(): return total`. Никаких time.Sleep и проверок Err в цикле — select сам ждёт нужного события."
+  ]
+}

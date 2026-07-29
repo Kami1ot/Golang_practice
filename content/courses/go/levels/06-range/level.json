@@ -1,0 +1,8 @@
+{
+  "id": "06-range",
+  "title": "range, break и continue",
+  "summary": "range по числу (Go 1.22+), досрочный выход break, пропуск итерации continue",
+  "requires": ["05-for"],
+  "xp": 20,
+  "group": "Циклы и коллекции"
+}

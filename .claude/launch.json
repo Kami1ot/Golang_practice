@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gopractice",
+      "runtimeExecutable": "C:\\Program Files\\Go\\bin\\go.exe",
+      "runtimeArgs": ["run", "./cmd/server"],
+      "port": 8080
+    },
+    {
+      "name": "gopractice-8081",
+      "runtimeExecutable": "C:\\Program Files\\Go\\bin\\go.exe",
+      "runtimeArgs": ["run", "./cmd/server", "-addr", "127.0.0.1:8081"],
+      "port": 8081
+    }
+  ]
+}

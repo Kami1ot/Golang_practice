@@ -1,0 +1,12 @@
+{
+  "id": "first",
+  "type": "unittest",
+  "title": "Предвидеть панику",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 15,
+  "hints": [
+    "Обращение nums[0] к пустому слайсу — паника index out of range. Задача — не дать ей случиться: guard-проверка длины ПЕРЕД обращением.",
+    "Каркас: `if len(nums) == 0 { return 0, errors.New(\"пустой слайс\") }; return nums[0], nil` (import \"errors\")."
+  ]
+}

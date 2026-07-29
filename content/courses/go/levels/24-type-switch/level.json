@@ -1,0 +1,8 @@
+{
+  "id": "24-type-switch",
+  "title": "any, type assertion и type switch",
+  "summary": "Пустой интерфейс без требований — и как достать конкретный тип обратно: v.(T), ok-идиома, switch v.(type)",
+  "requires": ["23-readers-writers"],
+  "xp": 25,
+  "group": "Интерфейсы"
+}

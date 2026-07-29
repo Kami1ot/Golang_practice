@@ -1,0 +1,9 @@
+{
+  "id": "25-bonus-sort",
+  "title": "Бонус: сортировка и sort.Slice",
+  "summary": "sort.Ints и sort.Slice с less-функцией, сортировка структур по ключам, sort.Interface под капотом",
+  "requires": ["21-interfaces"],
+  "optional": true,
+  "xp": 15,
+  "group": "Интерфейсы"
+}

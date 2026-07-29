@@ -1,0 +1,21 @@
+{
+  "id": "fizzbuzz",
+  "type": "io",
+  "title": "FizzBuzz (бонус)",
+  "required": false,
+  "order": 3,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "делится на 3", "stdin": "9\n", "stdout": "Fizz\n", "hidden": false },
+    { "name": "делится на 5", "stdin": "10\n", "stdout": "Buzz\n", "hidden": false },
+    { "name": "делится на 15", "stdin": "30\n", "stdout": "FizzBuzz\n", "hidden": true },
+    { "name": "не делится", "stdin": "7\n", "stdout": "7\n", "hidden": true },
+    { "name": "единица", "stdin": "1\n", "stdout": "1\n", "hidden": true },
+    { "name": "большое кратное 15", "stdin": "1500\n", "stdout": "FizzBuzz\n", "hidden": true }
+  ],
+  "hints": [
+    "Проверяйте от частного к общему: сначала «делится и на 3, и на 5», потом на 3, потом на 5 — иначе до FizzBuzz никогда не дойдёт очередь.",
+    "«Делится на 3 и на 5» — это `n%15 == 0` или, что то же самое, `n%3 == 0 && n%5 == 0`.",
+    "Удобен `switch` без выражения: четыре ветки — `case n%15 == 0`, `case n%3 == 0`, `case n%5 == 0` и `default` с выводом самого числа."
+  ]
+}

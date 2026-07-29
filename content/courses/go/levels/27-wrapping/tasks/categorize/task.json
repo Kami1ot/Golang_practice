@@ -1,0 +1,13 @@
+{
+  "id": "categorize",
+  "type": "unittest",
+  "title": "Сортировочный центр ошибок",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "Порядок веток: сначала `err == nil` (без него nil провалится в «неизвестную»), затем `errors.Is(err, ErrNotFound)`, затем `errors.As` для ValidationError, и в конце — общий случай.",
+    "Для errors.As заведите переменную-приёмник: `var ve ValidationError; if errors.As(err, &ve) { ... }` — амперсанд обязателен, поля берите из ve.",
+    "Тесты передают ошибки, обёрнутые в несколько слоёв, — именно поэтому нужны Is и As, а не == и type assertion."
+  ]
+}

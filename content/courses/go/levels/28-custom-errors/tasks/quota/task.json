@@ -1,0 +1,13 @@
+{
+  "id": "quota",
+  "type": "unittest",
+  "title": "Ошибка с данными внутри",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "Две части: метод Error() собирает сообщение через fmt.Sprintf из полей, Upload решает — ошибка или nil. Итоговый объём после загрузки — это used + size.",
+    "Точный формат сообщения: `квота исчерпана: 115 из 100` — fmt.Sprintf(\"квота исчерпана: %d из %d\", e.Used, e.Limit).",
+    "Граница: `used+size == limit` — это ещё НЕ перебор, загрузка проходит. Ошибка только при строгом >: `if used+size > limit { return QuotaError{Used: used + size, Limit: limit} }`."
+  ]
+}

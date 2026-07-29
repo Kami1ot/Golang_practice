@@ -1,0 +1,12 @@
+{
+  "id": "sort-desc",
+  "type": "unittest",
+  "title": "По убыванию",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 15,
+  "hints": [
+    "`sort.Ints` умеет только по возрастанию — здесь нужен `sort.Slice` со своей less-функцией (и `import \"sort\"`).",
+    "Вся функция — одна строка тела: `sort.Slice(nums, func(i, j int) bool { return nums[i] > nums[j] })`. Знак `>` и даёт убывание."
+  ]
+}

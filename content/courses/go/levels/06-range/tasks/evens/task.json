@@ -1,0 +1,18 @@
+{
+  "id": "evens",
+  "type": "io",
+  "title": "Только чётные",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "пример из условия", "stdin": "6\n", "stdout": "0\n2\n4\n6\n", "hidden": false },
+    { "name": "ноль", "stdin": "0\n", "stdout": "0\n", "hidden": true },
+    { "name": "единица", "stdin": "1\n", "stdout": "0\n", "hidden": true },
+    { "name": "нечётная граница", "stdin": "9\n", "stdout": "0\n2\n4\n6\n8\n", "hidden": true }
+  ],
+  "hints": [
+    "`range n` даёт числа до n−1, а нужно ДО n включительно — сколько итераций требуется на самом деле?",
+    "`for i := range n + 1` пробегает 0..n. Внутри проверяйте `i%2 != 0` и пропускайте такие числа через `continue`."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "safe-divide",
+  "type": "unittest",
+  "title": "recover на границе",
+  "required": true,
+  "order": 2,
+  "timeoutSec": 15,
+  "hints": [
+    "Каркас из урока: `defer func() { if r := recover(); r != nil { err = fmt.Errorf(\"паника: %v\", r) } }()` в самом начале функции, затем `result = a / b; return`.",
+    "Результаты именованные — `(result int, err error)`: присваивайте им, а не создавайте новые переменные. После паники обычный return не выполнится, наружу уедет то, что записал defer.",
+    "Деление на ноль само поднимет runtime-панику `integer divide by zero` — ваша задача не предотвратить её, а поймать и превратить в ошибку."
+  ]
+}

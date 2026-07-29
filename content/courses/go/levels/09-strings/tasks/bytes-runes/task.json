@@ -1,0 +1,19 @@
+{
+  "id": "bytes-runes",
+  "type": "io",
+  "title": "Байты и руны",
+  "required": true,
+  "order": 1,
+  "timeoutSec": 10,
+  "tests": [
+    { "name": "пример из условия", "stdin": "go\n", "stdout": "2 2\n", "hidden": false },
+    { "name": "кириллица", "stdin": "привет\n", "stdout": "12 6\n", "hidden": true },
+    { "name": "смесь кириллицы и знаков", "stdin": "го!\n", "stdout": "5 3\n", "hidden": true },
+    { "name": "один символ", "stdin": "a\n", "stdout": "1 1\n", "hidden": true },
+    { "name": "буква ё и цифра", "stdin": "ёж2\n", "stdout": "5 3\n", "hidden": true }
+  ],
+  "hints": [
+    "Слово читается как обычно: `var s string; fmt.Scan(&s)`.",
+    "Байты — это `len(s)`, символы — длина слайса рун `[]rune(s)`. Вывести оба числа через пробел умеет `fmt.Println(a, b)`."
+  ]
+}
