@@ -6,6 +6,11 @@
 # Runtime artifacts
 .run/
 
+# Local environment and API credentials
+.env
+.env.*
+!.env.example
+
 # Editor
 .vscode/
 .idea/
